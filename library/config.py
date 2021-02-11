@@ -98,6 +98,9 @@ class Config:
                 "options": options,
                 "geometry": geometry,
             }
+            path = config["dataset"]["source"]["url"]["path"]
+            subpath = config["dataset"]["source"]["url"]["subpath"]
+            config["dataset"]["source"]["url"]["gdalpath"] = format_url(path, subpath)
 
         if self.source_type == "url":
             # Load unrendered template to check for yml-specified
@@ -125,6 +128,10 @@ class Config:
             # Force overwrite of yml version with appropriate version
             config["dataset"]["version"] = version
 
+            path = config["dataset"]["source"]["url"]["path"]
+            subpath = config["dataset"]["source"]["url"]["subpath"]
+            config["dataset"]["source"]["url"]["gdalpath"] = format_url(path, subpath)
+
         if self.source_type == "socrata":
             # For socrata we are computing the url and add the url object to the config file
             _uid = self.parsed_unrendered_template["dataset"]["source"]["socrata"][
@@ -148,9 +155,10 @@ class Config:
                 "geometry": geometry,
             }
 
-        path = config["dataset"]["source"]["url"]["path"]
-        subpath = config["dataset"]["source"]["url"]["subpath"]
-        config["dataset"]["source"]["url"]["gdalpath"] = format_url(path, subpath)
+            path = config["dataset"]["source"]["url"]["path"]
+            subpath = config["dataset"]["source"]["url"]["subpath"]
+            config["dataset"]["source"]["url"]["gdalpath"] = path
+
         return config
 
     @property
