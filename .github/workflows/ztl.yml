@@ -1,0 +1,29 @@
+name: Zoning Tax Lots Bulk Load
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  build:
+    if: contains(github.event.issue.title, '[ztl]')
+    runs-on: ubuntu-20.04
+    env:
+      AWS_S3_ENDPOINT: ${{ secrets.DO_S3_ENDPOINT }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.DO_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.DO_SECRET_ACCESS_KEY }}
+      AWS_S3_BUCKET: edm-recipes
+    strategy:
+      matrix:
+        dataset: [dcp_mih, dcp_edesignation, dcp_commercialoverlay, dcp_limitedheight, dcp_zoningdistricts, dcp_specialpurpose, dcp_specialpurposesubdistricts, dcp_zoningtaxlots, dcp_zoningmapamendments, dof_dtm, dof_shoreline, dof_condo]
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: NYCPlanning/action-library-archive@v1.1
+        id: ${{ matrix.node }}
+        with:
+          name: ${{ matrix.node }}
+          latest: true
+          s3: true
+          compress: false
+          output_format: pgdump
