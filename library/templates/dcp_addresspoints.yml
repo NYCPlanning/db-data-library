@@ -1,0 +1,30 @@
+dataset:
+  name: &name dcp_addresspoints
+  version: "{{ version }}"
+  acl: public-read
+  source:
+    url:
+      path: ""
+      subpath: ""
+    options:
+      - "AUTODETECT_TYPE=NO"
+      - "EMPTY_STRING_AS_NULL=YES"
+    geometry:
+      SRS: EPSG:2263
+      type: POINT
+
+  destination:
+    name: *name
+    geometry:
+      SRS: EPSG:4326
+      type: POINT
+    options:
+      - "OVERWRITE=YES"
+      - "PRECISION=NO"
+    fields: []
+    sql: null
+
+  info:
+    description:
+    url: 
+    dependents: []
