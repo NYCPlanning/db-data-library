@@ -1,16 +1,14 @@
 dataset:
-  name: &name dof_dtm
+  name: &name dof_shoreline
   version: "{{ version }}"
   acl: public-read
   source:
     url:
-      path: https://nyc3.digitaloceanspaces.com/edm-publishing/datasets/tax_lot_polygon/staging/gis_tax_lot_polygon.zip
+      path: https://nyc3.digitaloceanspaces.com/edm-publishing/datasets/shoreline_polygon/staging/gis_shoreline_polygon.zip
       subpath: ""
     options:
       - "AUTODETECT_TYPE=NO"
       - "EMPTY_STRING_AS_NULL=YES"
-      - "X_POSSIBLE_NAMES=lon"
-      - "Y_POSSIBLE_NAMES=lat"
     geometry:
       SRS: EPSG:2263
       type: MULTIPOLYGON
@@ -18,7 +16,7 @@ dataset:
   destination:
     name: *name
     geometry:
-      SRS: EPSG:4326
+      SRS: EPSG:2263
       type: MULTIPOLYGON
     options:
       - "OVERWRITE=YES"
@@ -28,7 +26,7 @@ dataset:
 
   info:
     description: |
-      ### DOF's Digital Tax Map
-      Received through EDM>GIS
-    url: "http://gis.nyc.gov/taxmap/"
+      ## DOF Shoreline
+      uploaded by GIS
+    url: null
     dependents: []

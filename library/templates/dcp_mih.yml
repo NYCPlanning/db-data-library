@@ -4,7 +4,7 @@ dataset:
   acl: public-read
   source:
     url:
-      path: s3://edm-storage/MANDATORY_INCLUSIONARY_HOUSING/latest/mandatory_inclusionary_housing.zip
+      path: https://nyc3.digitaloceanspaces.com/edm-publishing/datasets/mandatory_inclusionary_housing/staging/gis_mandatory_inclusionary_housing.zip
       subpath: ""
     options:
       - "AUTODETECT_TYPE=NO"

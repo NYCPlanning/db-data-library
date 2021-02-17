@@ -3,14 +3,15 @@ dataset:
   version: "{{ version }}"
   acl: public-read
   source:
-    uid: bvi6-r9nk
-    format: csv
+    socrata:
+      uid: bvi6-r9nk
+      format: csv
     options:
       - "AUTODETECT_TYPE=NO"
       - "EMPTY_STRING_AS_NULL=YES"
       - "GEOM_POSSIBLE_NAMES=the_geom"       
     geometry:
-      SRS: EPSG:2263
+      SRS: EPSG:4326
       type: POINT
 
   destination:

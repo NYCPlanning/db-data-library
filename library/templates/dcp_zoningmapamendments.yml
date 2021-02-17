@@ -4,7 +4,7 @@ dataset:
   acl: public-read
   source:
     url:
-      path: s3://edm-storage/ZONING_FEATURES/zoning_map_amendments/latest/zoning_map_amendments.zip
+      path: https://nyc3.digitaloceanspaces.com/edm-publishing/datasets/zoning_map_amendments/staging/gis_zoning_map_amendments.zip
       subpath: ""
     options:
       - "AUTODETECT_TYPE=NO"

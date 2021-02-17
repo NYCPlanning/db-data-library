@@ -6,7 +6,7 @@ def test_format_url():
         dict(
             path="https://website.com/path/file.csv",
             subpath="",
-            expected="/vsicurl/https://website.com/path/file.csv",
+            expected="https://website.com/path/file.csv",
         ),
         dict(
             path="https://website.com/path/file.zip",

@@ -4,7 +4,7 @@ dataset:
   acl: public-read
   source:
     url:
-      path: s3://edm-storage/ZONING_FEATURES/limited_height_districts/latest/limited_height_districts.zip
+      path: https://nyc3.digitaloceanspaces.com/edm-publishing/datasets/limited_height_districts/staging/gis_limited_height_districts.zip
       subpath: ""
     options:
       - "AUTODETECT_TYPE=NO"

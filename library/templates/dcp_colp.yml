@@ -32,5 +32,7 @@ dataset:
       This dataset identifies City property under the jurisdiction of NYC Parks, which may be managed partially or solely by the Agency.
       More information: https://www1.nyc.gov/site/planning/about/publications/colp.page
     url: "https://www1.nyc.gov/site/planning/about/publications/colp.page"
-    dependents: []
+    dependents:
+      - dcp_pluto
+      - dcas_ipis
   

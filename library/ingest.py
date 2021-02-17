@@ -71,7 +71,8 @@ class Ingestor:
             )
 
             layerName = srcDS.GetLayer(0).GetName()
-            sql = destination.get("sql", "").replace("@filename", layerName)
+            sql = destination.get("sql", None)
+            sql = None if not sql else sql.replace("@filename", layerName)
 
             # Create output folder and output config
             if folder_path and output_suffix:

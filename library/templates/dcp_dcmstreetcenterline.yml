@@ -3,13 +3,12 @@ dataset:
   version: "{{ version }}"
   acl: public-read
   source:
-    socrata:
-      uid: hp7q-9unt
-      format: csv 
+    url:
+      path: https://nyc3.digitaloceanspaces.com/edm-publishing/datasets/dcm_streetcenterline/staging/gis_dcm_streetcenterline.zip
+      subpath: ""
     options:
       - "AUTODETECT_TYPE=NO"
       - "EMPTY_STRING_AS_NULL=YES"
-      - "GEOM_POSSIBLE_NAMES=the_geom"
     geometry:
       SRS: EPSG:2263
       type: MULTILINESTRING
@@ -27,11 +26,7 @@ dataset:
 
   info:
     description: |
-      ### NYC Screet Center Line
-      The NYC Street Centerline (CSCL) is a road-bed representation of New York City streets 
-      containing address ranges and other information such as traffic directions, road types, 
-      segment types.
-      Previously posted versions of the data are retained to comply with Local Law 106 of 2015 and 
-      can be provided upon request made to Open Data.
-    url: "https://data.cityofnewyork.us/City-Government/NYC-Street-Centerline-CSCL-/exjm-f27b"
+      ## DCM-Street Center Line
+      Citywide street center-line features representing official street names and widths shown on the Official City Map of New York City.
+    url: "https://www1.nyc.gov/site/planning/data-maps/open-data/dwn-digital-city-map.page"
     dependents: []
