@@ -1,5 +1,5 @@
 dataset:
-  name: &name dcp_addresspoints
+  name: &name dcp_atomicpolygons
   version: "{{ version }}"
   acl: public-read
   source:
