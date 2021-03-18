@@ -30,17 +30,23 @@
 from typing import List, Literal
 
 import yaml
-from pydantic import BaseModel, ValidationError, validator
+from pydantic import BaseModel, ValidationError
 
 VALID_ACL_VALUES = (&#34;public-read&#34;, &#34;private&#34;)
 VALID_GEOMETRY_TYPES = (
+    &#34;NONE&#34;,
+    &#34;GEOMETRY&#34;,
     &#34;POINT&#34;,
-    &#34;LINE&#34;,
+    &#34;LINESTRING&#34;,
     &#34;POLYGON&#34;,
+    &#34;GEOMETRYCOLLECTION&#34;,
+    &#34;MULTIPOINT&#34;,
     &#34;MULTIPOLYGON&#34;,
     &#34;MULTILINESTRING&#34;,
-    &#34;LINESTRING&#34;,
-    &#34;NONE&#34;,
+    &#34;CIRCULARSTRING&#34;,
+    &#34;COMPOUNDCURVE&#34;,
+    &#34;CURVEPOLYGON&#34;,
+    &#34;MULTICURVE&#34;,
 )
 VALID_SOCRATA_FORMATS = (&#34;csv&#34;, &#34;geojson&#34;)
 
@@ -102,7 +108,6 @@ class Validator:
     &#34;&#34;&#34;
 
     def __init__(self, path):
-
         # Abort if file path is not valid
         if not self.__check_extension(path):
             raise Exception(&#34;File path must point to a .yml or .yaml file&#34;)
@@ -120,6 +125,17 @@ class Validator:
         with open(self.path, &#34;r&#34;) as stream:
             y = yaml.load(stream, Loader=yaml.FullLoader)
             return y
+
+    def __call__(self):
+        assert self.tree_is_valid, &#34;Some fields are not valid. Please review your file&#34;
+        assert (
+            self.dataset_name_matches
+        ), &#34;Dataset name must match file and destination name&#34;
+        assert (
+            self.has_only_one_source
+        ), &#34;Source can only have one property from either url, socrata or script&#34;
+
+        return True
 
     @property
     def tree_is_valid(self) -&gt; bool:
@@ -154,22 +170,7 @@ class Validator:
             ((&#34;socrata&#34; not in source_fields) and (&#34;script&#34; not in source_fields))
             if (&#34;url&#34; in source_fields)
             else ((&#34;socrata&#34; in source_fields) ^ (&#34;script&#34; in source_fields))
-        )
-
-    @property
-    def file_is_valid(self):
-
-        name = self.path.split(&#34;/&#34;)[-1].split(&#34;.&#34;)[0]
-
-        assert self.tree_is_valid, &#34;Wrong fields&#34;
-        assert (
-            self.dataset_name_matches
-        ), &#34;Dataset name must match file and destination name&#34;
-        assert (
-            self.has_only_one_source
-        ), &#34;Source can only have one property from either url, socrata or script&#34;
-
-        return True</code></pre>
+        )</code></pre>
 </details>
 </section>
 <section>
@@ -306,7 +307,7 @@ class Validator:
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="library.validator.GeometryType.type"><code class="name">var <span class="ident">type</span> : Literal['POINT', 'LINE', 'POLYGON', 'MULTIPOLYGON', 'MULTILINESTRING', 'LINESTRING', 'NONE']</code></dt>
+<dt id="library.validator.GeometryType.type"><code class="name">var <span class="ident">type</span> : Literal['NONE', 'GEOMETRY', 'POINT', 'LINESTRING', 'POLYGON', 'GEOMETRYCOLLECTION', 'MULTIPOINT', 'MULTIPOLYGON', 'MULTILINESTRING', 'CIRCULARSTRING', 'COMPOUNDCURVE', 'CURVEPOLYGON', 'MULTICURVE']</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -484,7 +485,6 @@ the library.</p></div>
     &#34;&#34;&#34;
 
     def __init__(self, path):
-
         # Abort if file path is not valid
         if not self.__check_extension(path):
             raise Exception(&#34;File path must point to a .yml or .yaml file&#34;)
@@ -502,6 +502,17 @@ the library.</p></div>
         with open(self.path, &#34;r&#34;) as stream:
             y = yaml.load(stream, Loader=yaml.FullLoader)
             return y
+
+    def __call__(self):
+        assert self.tree_is_valid, &#34;Some fields are not valid. Please review your file&#34;
+        assert (
+            self.dataset_name_matches
+        ), &#34;Dataset name must match file and destination name&#34;
+        assert (
+            self.has_only_one_source
+        ), &#34;Source can only have one property from either url, socrata or script&#34;
+
+        return True
 
     @property
     def tree_is_valid(self) -&gt; bool:
@@ -536,22 +547,7 @@ the library.</p></div>
             ((&#34;socrata&#34; not in source_fields) and (&#34;script&#34; not in source_fields))
             if (&#34;url&#34; in source_fields)
             else ((&#34;socrata&#34; in source_fields) ^ (&#34;script&#34; in source_fields))
-        )
-
-    @property
-    def file_is_valid(self):
-
-        name = self.path.split(&#34;/&#34;)[-1].split(&#34;.&#34;)[0]
-
-        assert self.tree_is_valid, &#34;Wrong fields&#34;
-        assert (
-            self.dataset_name_matches
-        ), &#34;Dataset name must match file and destination name&#34;
-        assert (
-            self.has_only_one_source
-        ), &#34;Source can only have one property from either url, socrata or script&#34;
-
-        return True</code></pre>
+        )</code></pre>
 </details>
 <h3>Instance variables</h3>
 <dl>
@@ -568,29 +564,6 @@ def dataset_name_matches(self) -&gt; bool:
     return (dataset[&#34;name&#34;] == self.fname) and (
         dataset[&#34;name&#34;] == dataset[&#34;destination&#34;][&#34;name&#34;]
     )</code></pre>
-</details>
-</dd>
-<dt id="library.validator.Validator.file_is_valid"><code class="name">var <span class="ident">file_is_valid</span></code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@property
-def file_is_valid(self):
-
-    name = self.path.split(&#34;/&#34;)[-1].split(&#34;.&#34;)[0]
-
-    assert self.tree_is_valid, &#34;Wrong fields&#34;
-    assert (
-        self.dataset_name_matches
-    ), &#34;Dataset name must match file and destination name&#34;
-    assert (
-        self.has_only_one_source
-    ), &#34;Source can only have one property from either url, socrata or script&#34;
-
-    return True</code></pre>
 </details>
 </dd>
 <dt id="library.validator.Validator.has_only_one_source"><code class="name">var <span class="ident">has_only_one_source</span></code></dt>
@@ -717,7 +690,6 @@ def tree_is_valid(self) -&gt; bool:
 <h4><code><a title="library.validator.Validator" href="#library.validator.Validator">Validator</a></code></h4>
 <ul class="">
 <li><code><a title="library.validator.Validator.dataset_name_matches" href="#library.validator.Validator.dataset_name_matches">dataset_name_matches</a></code></li>
-<li><code><a title="library.validator.Validator.file_is_valid" href="#library.validator.Validator.file_is_valid">file_is_valid</a></code></li>
 <li><code><a title="library.validator.Validator.has_only_one_source" href="#library.validator.Validator.has_only_one_source">has_only_one_source</a></code></li>
 <li><code><a title="library.validator.Validator.tree_is_valid" href="#library.validator.Validator.tree_is_valid">tree_is_valid</a></code></li>
 </ul>

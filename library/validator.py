@@ -2,23 +2,17 @@ from functools import cached_property
 from typing import List, Literal
 
 import yaml
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, ValidationError, validator
 
 VALID_ACL_VALUES = ("public-read", "private")
 VALID_GEOMETRY_TYPES = (
-    "NONE",
-    "GEOMETRY",
     "POINT",
-    "LINESTRING",
+    "LINE",
     "POLYGON",
-    "GEOMETRYCOLLECTION",
-    "MULTIPOINT",
     "MULTIPOLYGON",
     "MULTILINESTRING",
-    "CIRCULARSTRING",
-    "COMPOUNDCURVE",
-    "CURVEPOLYGON",
-    "MULTICURVE",
+    "LINESTRING",
+    "NONE",
 )
 VALID_SOCRATA_FORMATS = ("csv", "geojson")
 
@@ -80,6 +74,7 @@ class Validator:
     """
 
     def __init__(self, path):
+
         # Abort if file path is not valid
         if not self.__check_extension(path):
             raise Exception("File path must point to a .yml or .yaml file")
@@ -97,17 +92,6 @@ class Validator:
         with open(self.path, "r") as stream:
             y = yaml.load(stream, Loader=yaml.FullLoader)
             return y
-
-    def __call__(self):
-        assert self.tree_is_valid, "Some fields are not valid. Please review your file"
-        assert (
-            self.dataset_name_matches
-        ), "Dataset name must match file and destination name"
-        assert (
-            self.has_only_one_source
-        ), "Source can only have one property from either url, socrata or script"
-
-        return True
 
     @property
     def tree_is_valid(self) -> bool:
@@ -143,3 +127,18 @@ class Validator:
             if ("url" in source_fields)
             else (("socrata" in source_fields) ^ ("script" in source_fields))
         )
+
+    @property
+    def file_is_valid(self):
+
+        name = self.path.split("/")[-1].split(".")[0]
+
+        assert self.tree_is_valid, "Wrong fields"
+        assert (
+            self.dataset_name_matches
+        ), "Dataset name must match file and destination name"
+        assert (
+            self.has_only_one_source
+        ), "Source can only have one property from either url, socrata or script"
+
+        return True
