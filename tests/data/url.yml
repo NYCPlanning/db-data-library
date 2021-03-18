@@ -1,7 +1,7 @@
 dataset:
-  name: &name dcp_mappluto
+  name: &name url #dcp_mappluto
   version: "{{ version }}"
-  acl: public
+  acl: public-read
   # Source definition
   source:
     url:

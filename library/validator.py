@@ -93,7 +93,7 @@ class Validator:
         return extension in ["yml", "yaml"]
 
     @cached_property
-    def __file(self):
+    def file(self):
         with open(self.path, "r") as stream:
             y = yaml.load(stream, Loader=yaml.FullLoader)
             return y
@@ -111,11 +111,11 @@ class Validator:
 
     @property
     def tree_is_valid(self) -> bool:
-        if self.__file["dataset"] == None:
+        if self.file["dataset"] == None:
             return False
 
         try:
-            input_ds = Dataset(**self.__file["dataset"])
+            input_ds = Dataset(**self.file["dataset"])
 
         except ValidationError as e:
             print(e.json())
@@ -126,7 +126,7 @@ class Validator:
     # Check that source name matches filename and destination
     @property
     def dataset_name_matches(self) -> bool:
-        dataset = self.__file["dataset"]
+        dataset = self.file["dataset"]
         return (dataset["name"] == self.fname) and (
             dataset["name"] == dataset["destination"]["name"]
         )
@@ -134,7 +134,7 @@ class Validator:
     # Check that source has only one source from either url, socrata or script
     @property
     def has_only_one_source(self):
-        dataset = self.__file["dataset"]
+        dataset = self.file["dataset"]
         source_fields = list(dataset["source"].keys())
         # In other words: if url is in source, socrata or script cannot be.
         # If url is NOT in source. Only one from socrata or url can be. (XOR operator ^)

@@ -7,6 +7,7 @@ import yaml
 from jinja2 import Template
 
 from .utils import format_url
+from .validator import Validator
 
 
 # Custom dumper created for list indentation
@@ -23,31 +24,28 @@ class Config:
     """
 
     def __init__(self, path: str, version: str = None):
-        self.path = path
-        self.version = version
+        # Validate file provided on path before initializing config class
+        validator = Validator(path)
 
-    @property
-    def unparsed_unrendered_template(self) -> str:
-        """importing the yml file into a string"""
-        with open(self.path, "r") as f:
-            return f.read()
-
-    @property
-    def parsed_unrendered_template(self) -> dict:
-        """parsing unrendered template into a dictionary"""
-        return yaml.safe_load(self.unparsed_unrendered_template)
-
-    def parsed_rendered_template(self, **kwargs) -> dict:
-        """render template, then parse into a dictionary"""
-        template = Template(self.unparsed_unrendered_template)
-        return yaml.safe_load(template.render(**kwargs))
+        if validator():
+            self.path = path
+            self.version = version
+            # If validator passes all checks, use the parsed file
+            self.file = validator.file
+        else:
+            raise Exception("Cannot create config object with the provided path")
 
     @property
     def source_type(self) -> str:
         """determine the type of the source, either url, socrata or script"""
-        template = self.parsed_unrendered_template
-        source = template["dataset"]["source"]
-        return list(source.keys())[0]
+
+        source = self.file["dataset"]["source"]
+
+        if "url" in source.keys():
+            return "url"
+        if "socrata" in source.keys():
+            return "socrata"
+        return "script"
 
     def version_socrata(self, uid: str) -> str:
         """using the socrata API, collect the 'data last update' date"""
@@ -83,27 +81,26 @@ class Config:
                 version = self.version
             else:
                 version = self.version_today
-            config = self.parsed_rendered_template(version=version)
-            _config = self.parsed_unrendered_template
 
-            script_name = _config["dataset"]["source"]["script"]
+            self.file["dataset"]["version"] = version
+
+            script_name = self.file["dataset"]["source"]["script"]
             module = importlib.import_module(f"library.script.{script_name}")
             scriptor = module.Scriptor()
             url = scriptor.runner()
 
-            options = config["dataset"]["source"]["options"]
-            geometry = config["dataset"]["source"]["geometry"]
-            config["dataset"]["source"] = {
+            options = self.file["dataset"]["source"]["options"]
+            geometry = self.file["dataset"]["source"]["geometry"]
+            self.file["dataset"]["source"] = {
                 "url": {"path": url, "subpath": ""},
                 "options": options,
                 "geometry": geometry,
             }
 
         if self.source_type == "url":
-            # Load unrendered template to check for yml-specified
+            # Check for yml-specified
             # version (_version)
-            _config = self.parsed_unrendered_template
-            _version = _config["dataset"]["version"]
+            _version = self.file["dataset"]["version"]
 
             # If a custom version specified from CLI, take custom version
             if self.version:
@@ -119,39 +116,33 @@ class Config:
             if not self.version and not self.valid_version(_version):
                 version = self.version_today
 
-            # Render template
-            config = self.parsed_rendered_template(version=version)
-
-            # Force overwrite of yml version with appropriate version
-            config["dataset"]["version"] = version
+            # Assign version to .yml file
+            self.file["dataset"]["version"] = version
 
         if self.source_type == "socrata":
             # For socrata we are computing the url and add the url object to the config file
-            _uid = self.parsed_unrendered_template["dataset"]["source"]["socrata"][
-                "uid"
-            ]
-            _format = self.parsed_unrendered_template["dataset"]["source"]["socrata"][
-                "format"
-            ]
-            config = self.parsed_rendered_template(version=self.version_socrata(_uid))
+            _uid = self.file["dataset"]["source"]["socrata"]["uid"]
+            _format = self.file["dataset"]["source"]["socrata"]["format"]
+
+            self.file["dataset"]["version"] = self.version_socrata(_uid)
 
             if _format == "csv":
                 url = f"https://data.cityofnewyork.us/api/views/{_uid}/rows.csv"
             if _format == "geojson":
                 url = f"https://nycopendata.socrata.com/api/geospatial/{_uid}?method=export&format=GeoJSON"
 
-            options = config["dataset"]["source"]["options"]
-            geometry = config["dataset"]["source"]["geometry"]
-            config["dataset"]["source"] = {
+            options = self.file["dataset"]["source"]["options"]
+            geometry = self.file["dataset"]["source"]["geometry"]
+            self.file["dataset"]["source"] = {
                 "url": {"path": url, "subpath": ""},
                 "options": options,
                 "geometry": geometry,
             }
 
-        path = config["dataset"]["source"]["url"]["path"]
-        subpath = config["dataset"]["source"]["url"]["subpath"]
-        config["dataset"]["source"]["url"]["gdalpath"] = format_url(path, subpath)
-        return config
+        path = self.file["dataset"]["source"]["url"]["path"]
+        subpath = self.file["dataset"]["source"]["url"]["subpath"]
+        self.file["dataset"]["source"]["url"]["gdalpath"] = format_url(path, subpath)
+        return self.file
 
     @property
     def compute_json(self) -> str:

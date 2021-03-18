@@ -1,14 +1,14 @@
 from pathlib import Path
 
 from library.config import Config
+from library.validator import Validator
 
 from . import template_path
 
 
 def test_config_parsed_rendered_template():
-    c = Config(f"{Path(__file__).parent}/data/url.yml")
-    rendered = c.parsed_rendered_template(version="20v7")
-    assert rendered["dataset"]["version"] == "20v7"
+    c = Config(f"{Path(__file__).parent}/data/url.yml", "20v7").compute
+    assert c["dataset"]["version"] == "20v7"
 
 
 def test_config_source_type():
@@ -20,7 +20,7 @@ def test_config_source_type():
 
 def test_config_version_socrata():
     c = Config(f"{Path(__file__).parent}/data/socrata.yml")
-    uid = c.parsed_unrendered_template["dataset"]["source"]["socrata"]["uid"]
+    uid = c.file["dataset"]["source"]["socrata"]["uid"]
     version = c.version_socrata(uid)
     assert len(version) == 8  # format: YYYYMMDD
     assert int(version[-2:]) <= 31  # check date
@@ -58,3 +58,7 @@ def test_config_compute_parsed():
 def test_config_script():
     config = Config(f"{template_path}/bpl_libraries.yml").compute
     assert True
+
+
+def test_config_constructor():
+    c = Config(f"{template_path}/bpl_libraries.yml")

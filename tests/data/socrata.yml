@@ -1,6 +1,7 @@
 dataset:
-  name: &name dpr_parksproperties
+  name: &name socrata #dpr_parksproperties
   version: "{{ version }}"
+  acl: public-read
   source:
     # if source is socrata, the url can be computed
     socrata:
