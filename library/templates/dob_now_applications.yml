@@ -26,6 +26,10 @@ dataset:
 
   info:
     description: |
-      DOB NOW job applications received from DOB via FTP
+      ### DOB NOW job applications received from DOB via FTP
+      this requires additional processing by removing invalid characters for UTF-8 encoding. It seems the file from DOB 
+      is using a Windows-1252 encoding which has a few invalid characters e.g. bytes 0x96 "the dash character" and
+      0xe7 0x20 0x31 for the "c" in "facade". For more info on this topic check this thread: https://stackoverflow.com/a/7873916 
+      Those will need to be manually removed before the Data Sync github action for DevDB could be run otherwise the Data Sync will FAIL. 
     url: ""
     dependents: []
