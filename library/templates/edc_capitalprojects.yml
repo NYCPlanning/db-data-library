@@ -2,10 +2,9 @@ dataset:
   name: &name edc_capitalprojects
   version: "{{ version }}"
   acl: private
-  source:
-    url:
-      path: library/tmp/EDCCapital.zip
-      subpath: EDCCapital.shp
+  source: 
+    postgres:
+      path: "{{RECIPE_ENGINE}}"
     options:
       - "AUTODETECT_TYPE=NO"
       - "EMPTY_STRING_AS_NULL=YES"

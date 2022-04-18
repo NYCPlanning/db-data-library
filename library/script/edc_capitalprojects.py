@@ -1,14 +1,12 @@
 import pandas as pd
 import geopandas as gpd
 import os
-from os.path import join, dirname
 from sqlalchemy import create_engine 
 from dotenv import load_dotenv
 
 from . import gdf_to_zip_tempfile
 
-dotenv_path = join(dirname(__file__), '.env')
-load_dotenv(dotenv_path)
+load_dotenv()
 
 RECIPE_ENGINE = os.environ.get("RECIPE_ENGINE")
 
@@ -25,7 +23,7 @@ class Scriptor:
         return self.config["dataset"]["info"]["previous_version"]
 
     def ingest(self) -> gpd.GeoDataFrame:
-        gdf = gpd.read_file("CCP_Jan_2022/CCP_Jan22_EDC.shp")
+        gdf = gpd.read_file("library/tmp/CCP_Jan_2022/CCP_Jan22_EDC.shp")
         #gdf.insert(0, "v", self.version)
         return gdf
 
@@ -47,9 +45,8 @@ class Scriptor:
         pre = self.previous()
         new.columns = [x.lower() for x in new.columns]
         pre.drop(labels="ogc_fid", axis=1, inplace=True)
-        
         new.rename(columns={"geometry": "wkb_geometry"},inplace=True)
         final = pre.append(new)
         final = final.drop_duplicates()
-        #local_path = gdf_to_zip_tempfile(final)
-        return final
+        local_path = gdf_to_zip_tempfile(final)
+        return local_path
