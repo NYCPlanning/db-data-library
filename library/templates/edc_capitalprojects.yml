@@ -3,8 +3,8 @@ dataset:
   version: "{{ version }}"
   acl: private
   source: 
-    postgres:
-      path: "{{RECIPE_ENGINE}}"
+    script:
+      path: *name
     options:
       - "AUTODETECT_TYPE=NO"
       - "EMPTY_STRING_AS_NULL=YES"
