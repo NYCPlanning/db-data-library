@@ -9,6 +9,6 @@ def df_to_tempfile(df: pd.DataFrame) -> str:
     return f.name
 
 def gdf_to_zip_tempfile(gdf: pd.DataFrame) -> str:
-    f = tempfile.NamedTemporaryFile(delete=False, suffix=".shp")
-    gdf.to_file(f, index=False)
+    f = "tmp/edc_capitalprojects/edc_capitalproject.shp"
+    gdf.to_file(f)
     return f.name

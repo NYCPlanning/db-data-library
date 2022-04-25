@@ -24,6 +24,8 @@ class Scriptor:
 
     def ingest(self) -> gpd.GeoDataFrame:
         gdf = gpd.read_file("library/tmp/CCP_Jan_2022/CCP_Jan22_EDC.shp")
+
+        gdf = gdf.to_crs("EPSG:2263")
         #gdf.insert(0, "v", self.version)
         return gdf
 
@@ -42,11 +44,12 @@ class Scriptor:
 
     def runner(self) -> gpd.GeoDataFrame:
         new = self.ingest()
-        pre = self.previous()
+        prev = self.previous()
         new.columns = [x.lower() for x in new.columns]
-        pre.drop(labels="ogc_fid", axis=1, inplace=True)
+        prev.drop(labels="ogc_fid", axis=1, inplace=True)
         new.rename(columns={"geometry": "wkb_geometry"},inplace=True)
-        final = pre.append(new)
+        final = prev.append(new)
         final = final.drop_duplicates()
-        local_path = gdf_to_zip_tempfile(final)
+        print(final.geometry)
+        local_path = gdf_to_zip_tempfile(final) # need to rewrite this with csv but first solve crs issue
         return local_path
