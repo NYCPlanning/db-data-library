@@ -27,7 +27,7 @@ dataset:
 
   info:
     description: |
-      ## Facilities Database (FacDB) 20210811 
+      ## Facilities Database (FacDB) 20220630
       NOTE: the version date above should be updated according to the most recent version in the the url below
       The Department of City Planning aggregates information about 30,000+ facilities and program sites that are owned, operated, funded, licensed, or certified by a City, State, or Federal agency in the City of New York into a central database called the City Planning Facilities Database (FacDB). These facilities generally help to shape quality of life in the city’s neighborhoods, and this dataset is the basis for a series of planning activities. This public data resource allows all New Yorkers to understand the breadth of government resources in their neighborhoods.
       This dataset is now complemented with the Facilities Explorer, a new interactive web map that makes the data more accessible and allows users to quickly filter the data for their needs.
