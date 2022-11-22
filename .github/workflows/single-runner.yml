@@ -4,17 +4,17 @@ on:
   workflow_dispatch:
     inputs:
       dataset:
-        description: "Name of the dataset (required)"
+        description: 'Name of the dataset (required)'
         required: true
-        default: ""
+        default: dcp_mapluto
       latest:
-        description: "Tag this version as latest (optional)"
+        description: 'Tag this version as latest (optional)'
         required: false
-        default: "true"
+        default: 'true'
       version:
-        description: "The version of the dataset (i.e. 22v2, 21C) if needed (optional)"
+        description: 'The version of the dataset (i.e. 22v2, 21C) if needed (optional)'
         required: false
-        default: ""
+        default: ''
 
 
 
