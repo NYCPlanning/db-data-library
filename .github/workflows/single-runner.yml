@@ -6,7 +6,7 @@ on:
       dataset:
         description: 'Name of the dataset (required)'
         required: true
-        default: 'dcp_mapluto_clipped'
+        default: dcp_mapluto_clipped
       latest:
         description: 'Tag this version as latest (optional)'
         required: false
@@ -14,7 +14,6 @@ on:
       version:
         description: 'The version of the dataset (i.e. 22v2, 21C) if needed (optional)'
         required: false
-        default: ''
 
 
 
