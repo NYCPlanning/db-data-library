@@ -1,0 +1,30 @@
+dataset:
+  name: &name edc_housingprojections
+  version: "{{ version }}"
+  acl: public-read
+  source:
+    url:
+      path: library/tmp/{{ version }}_EDCInputsDCPHousingProjections.xlsx
+      subpath: ""
+    options:
+      - "AUTODETECT_TYPE=NO"
+      - "EMPTY_STRING_AS_NULL=YES"
+    geometry:
+      SRS: null
+      type: NONE
+
+  destination:
+    name: *name
+    geometry:
+      SRS: null
+      type: NONE
+    options:
+      - "OVERWRITE=YES"
+    fields: []
+    sql: null
+
+  info:
+    description: |
+      # EDC Projects
+      Projected projects expected by EDC to develop residential units with reasonable certainty. Provided by EDC.
+    dependents: []
