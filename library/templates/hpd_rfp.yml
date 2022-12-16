@@ -1,0 +1,30 @@
+dataset:
+  name: &name hpd_rfp
+  version: "{{ version }}"
+  acl: public-read
+  source:
+    url:
+      path: library/tmp/{{ version }}_HPD_RFPs.xlsx
+      subpath: ""
+    options:
+      - "AUTODETECT_TYPE=NO"
+      - "EMPTY_STRING_AS_NULL=YES"
+    geometry:
+      SRS: null
+      type: NONE
+
+  destination:
+    name: *name
+    geometry:
+      SRS: null
+      type: NONE
+    options:
+      - "OVERWRITE=YES"
+    fields: []
+    sql: null
+
+  info:
+    description: |
+      # HPD Request for Proposal
+      City-owned sites for which HPD has issued or designated RFPs for residential development. Provided by HPD.
+    dependents: []
