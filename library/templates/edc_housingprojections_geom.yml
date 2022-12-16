@@ -1,0 +1,30 @@
+dataset:
+  name: &name edc_housingprojections_geom
+  version: "{{ version }}"
+  acl: public-read
+  source:
+    url:
+      path: library/tmp/edc_shapefile_{{ version }}.zip
+      subpath: "edc_shapefile_{{ version }}/edc_shapefile_{{ version }}.shp"
+    options:
+      - "AUTODETECT_TYPE=NO"
+      - "EMPTY_STRING_AS_NULL=YES"
+    geometry:
+      SRS: null
+      type: NONE
+
+  destination:
+    name: *name
+    geometry:
+      SRS: null
+      type: NONE
+    options:
+      - "OVERWRITE=YES"
+    fields: []
+    sql: null
+
+  info:
+    description: |
+      # EDC Projects
+      Projected projects expected by EDC to develop residential units with reasonable certainty. Provided by EDC.
+    dependents: []
