@@ -10,14 +10,14 @@ dataset:
       - "AUTODETECT_TYPE=NO"
       - "EMPTY_STRING_AS_NULL=YES"
     geometry:
-      SRS: null
-      type: NONE
+      SRS: EPSG:4326
+      type: MULTILINESTRING
 
   destination:
     name: *name
     geometry:
-      SRS: null
-      type: NONE
+      SRS: EPSG:4326
+      type: MULTILINESTRING
     options:
       - "OVERWRITE=YES"
     fields: []
