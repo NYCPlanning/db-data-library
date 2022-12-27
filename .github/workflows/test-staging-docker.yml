@@ -1,4 +1,4 @@
-name: :safety_vest: Staging Docker Image Test
+name: Staging Docker Image Test
 
 on:
   workflow_dispatch:
