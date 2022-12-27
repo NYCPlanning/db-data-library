@@ -27,7 +27,7 @@ jobs:
       AWS_S3_BUCKET: edm-recipes
     steps:
       - uses: actions/checkout@v2.3.4
-      - uses: NYCPlanning/action-library-archive@v1.1
+      - uses: NYCPlanning/action-library-archive@v1.2
         name: Archive ${{ github.event.inputs.dataset }}
         with:
           name: ${{ github.event.inputs.dataset }}
