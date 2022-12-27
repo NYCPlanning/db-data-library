@@ -16,7 +16,6 @@ dataset:
   
   destination:
     name: *name
-    dstDS: test_docker/nyct2020
     geometry:
       SRS: EPSG:4326
       type: MULTIPOLYGON
