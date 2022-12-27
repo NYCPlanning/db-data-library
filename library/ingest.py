@@ -50,6 +50,7 @@ class Ingestor:
             name = dataset["name"]
             version = dataset["version"]
             acl = dataset["acl"]
+            template_dstDS = destination["dstDS"]
             (dstDS, output_format, output_suffix, compress, inplace) = func(
                 self, *args, **kwargs
             )
@@ -59,6 +60,8 @@ class Ingestor:
             if output_suffix:
                 destination_path = f"{folder_path}/{name}.{output_suffix}"
                 output_files.append(destination_path)
+            elif template_dstDS:
+                destination_path = template_dstDS
             else:
                 destination_path = None
 
