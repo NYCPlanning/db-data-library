@@ -31,6 +31,7 @@ class Archive:
         clean: bool = False,
         latest: bool = False,
         name: str = None,
+        test: bool = False
         *args,
         **kwargs,
     ):
@@ -95,6 +96,9 @@ class Archive:
         for _file in output_files:
             if push:
                 key = _file.replace(base_path + "/", "")
+                self.s3.put(_file, key, acl, metadata={"version": version})
+            if push and test:
+                key = _file.replace(base_path + "/datasets", "datasets/test")
                 self.s3.put(_file, key, acl, metadata={"version": version})
             if push and latest:
                 # Upload file to a latest directory, where version metadata is version

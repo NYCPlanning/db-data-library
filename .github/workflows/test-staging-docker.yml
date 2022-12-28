@@ -17,13 +17,29 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.DO_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.DO_SECRET_ACCESS_KEY }}
       AWS_S3_BUCKET: edm-recipes
+    strategy:
+      matrix:
+        dataset:
+          - dcp_atomicpolygons
+          - dcp_boroboundaries
+          - dcp_boroboundaries_wi
+          - dcp_cdboundaries
+          - dcp_cdboundaries_wi
+          - dcp_ct2010
+          - dcp_ct2010_wi
+          - dcp_ct2020
+          - dcp_ct2020_wi
+          - dcp_cb2010
+          - dcp_cb2010_wi
+          - dcp_cb2020
     steps:
       - uses: actions/checkout@v2.3.4
       - uses: NYCPlanning/action-library-archive@v1.2
-        name: Archive test_docker
+        name: Testing ${{ github.event.inputs.dataset }}
         with:
-          name: test_docker
-          latest: true
+          test: true
+          name: ${{ github.event.inputs.dataset }}
+          latest: false
           version: ${{ github.event.inputs.version }}
           s3: true
           compress: true
