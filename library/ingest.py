@@ -50,23 +50,26 @@ class Ingestor:
             name = dataset["name"]
             version = dataset["version"]
             acl = dataset["acl"]
-            template_dstDS = destination["dstDS"]
             (dstDS, output_format, output_suffix, compress, inplace) = func(
                 self, *args, **kwargs
             )
             # initiate source and destination datasets
-            folder_path = f"{self.base_path}/datasets/{name}/{version}"
-
+            try:
+                subfolder = destination["subfolder"]
+                folder_path = f"{self.base_path}/datasets/{subfolder}/{name}/{version}"
+            except KeyError:
+                folder_path = f"{self.base_path}/datasets/{name}/{version}"
+            print(f"what is the folder_path: {folder_path}")
             if output_suffix:
                 destination_path = f"{folder_path}/{name}.{output_suffix}"
                 output_files.append(destination_path)
-            elif template_dstDS:
-                destination_path = template_dstDS
             else:
                 destination_path = None
+            print(f"what is the destination_path: {destination_path}")
 
             # Default dstDS is destination_path if no dstDS is specificed
             dstDS = destination_path if not dstDS else dstDS
+            print(dstDS)
             srcDS = generic_source(
                 path=source["url"]["gdalpath"],
                 options=source["options"],

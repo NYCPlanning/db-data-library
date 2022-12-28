@@ -16,7 +16,7 @@ dataset:
   
   destination:
     name: *name
-    dstDS: test_docker_
+    subfolder: test_docker_
     geometry:
       SRS: EPSG:4326
       type: MULTIPOLYGON
