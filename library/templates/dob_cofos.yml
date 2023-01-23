@@ -29,6 +29,6 @@ dataset:
       place the new file at the root directory of the db-data-library
       repo named `dob_cofos.csv` so that the script runner can 
       run successfully.
-    url: "https://www.nypl.org/locations"
+    url: ""
     dependents: []
     previous_version: 20210105
