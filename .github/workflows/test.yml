@@ -38,7 +38,6 @@ jobs:
         pipx install poetry --include-deps
         poetry config virtualenvs.create false --local
         poetry install
-        poetry update pytest
 
     - name: Pytest
       shell: bash
