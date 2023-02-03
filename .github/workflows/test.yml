@@ -35,7 +35,7 @@ jobs:
       shell: bash
       run: |
         source ~/.bashrc
-        pipx install poetry --include-deps
+        pipx install poetry==1.1.6 --include-deps
         poetry config virtualenvs.create false --local
         poetry install
 
@@ -90,10 +90,10 @@ jobs:
 
     - name: Install Python dependencies, create docs
       run: |
-        python3.10 -m pip install --upgrade pip
-        python3.10 -m pip install .
-        python3.10 -m pip install pdoc3
-        python3.10 -m pdoc -f -o docs --html library
+        python3.8 -m pip install --upgrade pip
+        python3.8 -m pip install .
+        python3.8 -m pip install pdoc3
+        python3.8 -m pdoc -f -o docs --html library
 
     - name: Archive artifacts
       uses: actions/upload-artifact@v2
