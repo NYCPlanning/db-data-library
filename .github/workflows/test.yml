@@ -13,9 +13,9 @@ jobs:
     container: osgeo/gdal:ubuntu-small-3.6.1
     env:
       RECIPE_ENGINE: ${{ secrets.RECIPE_ENGINE }}
-      AWS_S3_ENDPOINT: ${{ secrets.MINIO_S3_ENDPOINT }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.MINIO_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.MINIO_SECRET_ACCESS_KEY }}
+      AWS_S3_ENDPOINT: ${{ secrets.DO_S3_ENDPOINT }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.DO_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.DO_SECRET_ACCESS_KEY }}
       AWS_S3_BUCKET: edm-recipes
     steps:
     - uses: actions/checkout@v2
