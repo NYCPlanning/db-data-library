@@ -1,7 +1,4 @@
-import json
-
 import pandas as pd
-import requests
 
 from . import get_json_content, df_to_tempfile
 

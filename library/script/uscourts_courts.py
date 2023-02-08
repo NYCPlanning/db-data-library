@@ -1,10 +1,4 @@
-import json
-import ssl
-from urllib.request import Request, urlopen
-
 import pandas as pd
-import requests
-from bs4 import BeautifulSoup
 
 from . import get_json_content, df_to_tempfile
 
