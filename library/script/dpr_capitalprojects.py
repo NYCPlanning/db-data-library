@@ -1,9 +1,6 @@
-import json
-
 import pandas as pd
-import requests
 
-from . import df_to_tempfile
+from . import get_json_content, df_to_tempfile
 
 
 class Scriptor:
@@ -12,7 +9,8 @@ class Scriptor:
 
     def ingest(self) -> pd.DataFrame:
         url = "https://www.nycgovparks.org/bigapps/DPR_CapitalProjectTracker_001.json"
-        data = json.loads(requests.get(url).content)
+        data = get_json_content(url)
+
         df = pd.DataFrame(data)
         df = df[["TrackerID", "FMSID", "Title", "TotalFunding", "Locations"]]
         df["Locations"] = df["Locations"].apply(lambda x: x.get("Location"))
