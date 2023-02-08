@@ -12,6 +12,12 @@ def df_to_tempfile(df: pd.DataFrame) -> str:
 
 
 def get_json_content(url: str) -> str:
+    """
+    Gets content of a JSON file from a URL
+    url: URL of JSON file
+        exmaple: https://refinery.nypl.org/api/nypl/locations/v1.0/locations
+        exmaple: https://www.nycgovparks.org/bigapps/DPR_CapitalProjectTracker_001.json
+    """
     # use default headers to prevent "403 Client Error: Forbidden for url"
     default_headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
