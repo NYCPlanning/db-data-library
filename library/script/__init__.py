@@ -13,7 +13,7 @@ def df_to_tempfile(df: pd.DataFrame) -> str:
 
 def get_json_content(url: str) -> str:
     """
-    Gets content of a JSON file from a URL
+    Gets content of a JSON file from a URL.
     url: URL of JSON file
         exmaple: https://refinery.nypl.org/api/nypl/locations/v1.0/locations
         exmaple: https://www.nycgovparks.org/bigapps/DPR_CapitalProjectTracker_001.json
