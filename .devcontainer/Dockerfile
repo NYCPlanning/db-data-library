@@ -6,8 +6,4 @@ RUN adduser --disabled-password --gecos '' vscode
 
 USER vscode
 
-RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.3.2
-
-ENV PATH="~/.poetry/bin:$PATH"
-
-ENV PATH="~/.local/bin:$PATH"
+RUN curl -sSL https://install.python-poetry.org | python3 -
