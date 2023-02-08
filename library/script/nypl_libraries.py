@@ -1,9 +1,6 @@
-import json
-
 import pandas as pd
-import requests
 
-from . import df_to_tempfile
+from . import get_json_content, df_to_tempfile
 
 
 class Scriptor:
@@ -12,8 +9,7 @@ class Scriptor:
 
     def ingest(self) -> pd.DataFrame:
         url = "https://refinery.nypl.org/api/nypl/locations/v1.0/locations"
-        content = requests.get(url).content
-        records = json.loads(content)["locations"]
+        records = get_json_content(url)["locations"]
         data = []
         for i in records:
             parsed = dict(

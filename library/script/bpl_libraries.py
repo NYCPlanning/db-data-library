@@ -1,9 +1,6 @@
-import json
-
 import pandas as pd
-import requests
 
-from . import df_to_tempfile
+from . import get_json_content, df_to_tempfile
 
 
 class Scriptor:
@@ -12,15 +9,14 @@ class Scriptor:
 
     def ingest(self) -> pd.DataFrame:
         url = "https://www.bklynlibrary.org/locations/json"
-        response = requests.get(url)
-        content = json.loads(response.content)
+        content = get_json_content(url)
         data = []
         for i in content["locations"]:
             data.append(i["data"])
         df = pd.DataFrame.from_dict(data, orient="columns")
         df.loc[df["position"] == "", "position"] = ","
-        df['latitude'] = df.position.apply(lambda x: x.split(',')[0].strip())
-        df['longitude'] = df.position.apply(lambda x: x.split(',')[1].strip())
+        df["latitude"] = df.position.apply(lambda x: x.split(",")[0].strip())
+        df["longitude"] = df.position.apply(lambda x: x.split(",")[1].strip())
         return df
 
     def runner(self) -> str:

@@ -1,12 +1,6 @@
-import json
-import ssl
-from urllib.request import Request, urlopen
-
 import pandas as pd
-import requests
-from bs4 import BeautifulSoup
 
-from . import df_to_tempfile
+from . import get_json_content, df_to_tempfile
 
 
 class Scriptor:
@@ -18,8 +12,8 @@ class Scriptor:
         }
 
     def get_location(self, boro):
-        response = requests.get(self.sites.get(boro)).content
-        locations = json.loads(response).get("results").get("locations")
+        content = get_json_content(self.sites.get(boro))
+        locations = content.get("results").get("locations")
         return locations
 
     # deduplicate, --> in reality there's no duplicated items
