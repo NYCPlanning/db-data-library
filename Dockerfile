@@ -6,7 +6,7 @@ WORKDIR /library/
 
 RUN apt update && apt install -y python3-pip python3-distutils
 
-RUN curl -sSL https://install.python-poetry.org | python3 -
+RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.3.2
 
 RUN export PATH="/root/.local/bin:$PATH" &&\
     poetry config virtualenvs.create false --local &&\
