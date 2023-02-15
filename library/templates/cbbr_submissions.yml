@@ -26,6 +26,10 @@ dataset:
 
   info:
     description: |
-      ###  
-    url:
+      ###  The cbbr_submissions (Community Board Budget Requests) data consists of budget 
+      requests submitted through NYC's various community boards. Each record consists of 
+      an indiviudal budget request and the responsible agencies response to each formal 
+      budget request. This data is compiled by DCP Strategic Planning and given to DCP Data
+      Engineering team as an xlsx file which is manually uploaded and ingested via data-library.
+    url: https://www.nyc.gov/site/cau/community-boards/community-boards.page 
     dependents: []
