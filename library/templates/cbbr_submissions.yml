@@ -31,5 +31,9 @@ dataset:
       an indiviudal budget request and the responsible agencies response to each formal 
       budget request. This data is compiled by DCP Strategic Planning and given to DCP Data
       Engineering team as an xlsx file which is manually uploaded and ingested via data-library.
+      In the latest iteration of the .xlsx file we recieved from DCP Strategic Planning,  
+      a vlookup function was used to get key value pairs in certain columns which created invalid data
+      when saving the file as a csv. To bypass this, I saved the values in the columns as they appeared 
+      (negating any need for a lookup).
     url: https://www.nyc.gov/site/cau/community-boards/community-boards.page 
     dependents: []
