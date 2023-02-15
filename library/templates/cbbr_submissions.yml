@@ -31,6 +31,8 @@ dataset:
       an indiviudal budget request and the responsible agencies response to each formal 
       budget request. This data is compiled by DCP Strategic Planning and given to DCP Data
       Engineering team as an xlsx file which is manually uploaded and ingested via data-library.
+
+      Note:
       In the latest iteration of the .xlsx file we recieved from DCP Strategic Planning,  
       a vlookup function was used to get key value pairs in certain columns which created invalid data
       when saving the file as a csv. 
@@ -39,8 +41,9 @@ dataset:
       2. Right click and select "Copy"
       3. Select the cell or column with the VLOOKUP and select "Paste Special..."
       4. In the Paste Special Dialog popup, Clcik on "Values" option
-      5. Delete the "Keys" sheet and save as a .csv (the csv file is needed as it's the 
+      5. Delete the "Keys" sheet and save as a cbbr_submissions.csv (the csv file is needed as it's the 
       acceptable tabular format for data-library)
-      6. Test that the file is uploaded correctly and columns populate with valid data 
+      6. Add the cbbr_submissions.csv to library/tmp/cbbr_submissions.csv path
+      7. Test that the file is uploaded correctly and columns populate with valid data 
     url: https://www.nyc.gov/site/cau/community-boards/community-boards.page 
     dependents: []
