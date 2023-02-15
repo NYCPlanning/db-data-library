@@ -40,7 +40,8 @@ dataset:
       1. Select the cell (or column) where the VLOOKUP formula is
       2. Right click and select "Copy"
       3. Select the cell or column with the VLOOKUP and select "Paste Special..."
-      4. In the Paste Special Dialog popup, Clcik on "Values" option
+      4. In the Paste Special Dialog popup, select the "Values" option (the data should now 
+      persist without the need for the VLOOKUP)
       5. Delete the "Keys" sheet and save as a cbbr_submissions.csv (the csv file is needed as it's the 
       acceptable tabular format for data-library)
       6. Add the cbbr_submissions.csv to library/tmp/cbbr_submissions.csv path
