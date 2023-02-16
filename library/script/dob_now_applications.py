@@ -31,10 +31,10 @@ class Scriptor:
             Key=f"dob_now/dob_now_job_applications/DOB_Now_Job_Filing_Data_for_DCP_{self.version}.csv",
         )
         #convert to a literal string of bytes with correct encoding
-        s = str(obj["Body"].read(), "Windows-1252")
+        s = str(obj["Body"].read(), "utf-8")
         # use StringIO to convert consumable format for pd.read_csv
         data = StringIO(s)
-        df = pd.read_csv(data, encoding="Windows-1252")
+        df = pd.read_csv(data, encoding="utf-8")
         return df
 
     def runner(self) -> str:
