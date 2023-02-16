@@ -24,9 +24,10 @@ dataset:
 
   info:
     description: |
-      DOB NOW job applications received from DOB via FTP which is hosted by Matt and manually moved to sharepoint
-      the python handles the encoding of the source file which is not standard utf-8 and also ingesting
-      from the edm-private s3 bucket.
+      DOB NOW job applications received from DOB via the DOB FTP which can be accessed via CyberDuck on DCP 
+      Windows machines (see internal documentation for credentials). The encoding standard of 
+      the file should be double checked before and after uploading to Digital Ocean as it 
+      has changed between versions (from "Windows-1252" to "utf-8", etc).
 
       There is an extensive writeup in a github issue about DOB NOW custome job filing data
       https://github.com/NYCPlanning/db-developments/issues/386#issue-864138806
