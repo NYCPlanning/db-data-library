@@ -54,16 +54,22 @@ class Ingestor:
                 self, *args, **kwargs
             )
             # initiate source and destination datasets
-            folder_path = f"{self.base_path}/datasets/{name}/{version}"
-
+            try:
+                subfolder = destination["subfolder"]
+                folder_path = f"{self.base_path}/datasets/{subfolder}/{name}/{version}"
+            except KeyError:
+                folder_path = f"{self.base_path}/datasets/{name}/{version}"
+            print(f"what is the folder_path: {folder_path}")
             if output_suffix:
                 destination_path = f"{folder_path}/{name}.{output_suffix}"
                 output_files.append(destination_path)
             else:
                 destination_path = None
+            print(f"what is the destination_path: {destination_path}")
 
             # Default dstDS is destination_path if no dstDS is specificed
             dstDS = destination_path if not dstDS else dstDS
+            print(dstDS)
             srcDS = generic_source(
                 path=source["url"]["gdalpath"],
                 options=source["options"],
