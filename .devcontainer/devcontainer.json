@@ -17,7 +17,7 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 	// Adding id_rsa so that we can push to github from the dev container
-	"initializeCommand": "ssh-add $HOME/.ssh/id_rsa",
+	"initializeCommand": "ssh-add",
 	// Uncomment the next line to run commands after the container is created - for example installing curl.
 	"postCreateCommand": "export PATH=/root/.local/bin:$PATH && poetry install",
 	// Uncomment when using a ptrace-based debugger like C++, Go, and Rust
