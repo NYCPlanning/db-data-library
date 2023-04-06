@@ -1,15 +1,14 @@
 import pandas as pd
 
 from . import get_json_content, df_to_tempfile
+from .scriptor import ScriptorInterface
 
-
-class Scriptor:
+class Scriptor(ScriptorInterface):
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
     def ingest(self) -> pd.DataFrame:
-        url = "https://www.nycgovparks.org/bigapps/DPR_CapitalProjectTracker_001.json"
-        data = get_json_content(url)
+        data = get_json_content(self.path)
 
         df = pd.DataFrame(data)
         df = df[["TrackerID", "FMSID", "Title", "TotalFunding", "Locations"]]

@@ -10,9 +10,10 @@ import usaddress
 from bs4 import BeautifulSoup
 
 from . import df_to_tempfile
+from .scriptor import ScriptorInterface
 
 
-class Scriptor:
+class Scriptor(ScriptorInterface):
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
@@ -29,9 +30,8 @@ class Scriptor:
         return " ".join(result)
 
     def ingest(self) -> pd.DataFrame:
-        url = "https://www1.nyc.gov/site/doc/about/facilities-locations.page"
         hdr = {"User-Agent": "Mozilla/5.0"}
-        req = Request(url, headers=hdr)
+        req = Request(self.path, headers=hdr)
         gcontext = ssl.SSLContext()
         page = urlopen(req, context=gcontext)
         soup = BeautifulSoup(page, features="html.parser")

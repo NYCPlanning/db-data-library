@@ -4,6 +4,7 @@ dataset:
   acl: public-read
   source:
     script: *name
+    path: "library/tmp/LCGMS_SchoolData_{{ version }}.csv"
     options:
       - "AUTODETECT_TYPE=NO"
       - "EMPTY_STRING_AS_NULL=YES"

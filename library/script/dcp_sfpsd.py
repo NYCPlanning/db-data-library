@@ -1,15 +1,15 @@
 import pandas as pd
 
 from . import df_to_tempfile
+from .scriptor import ScriptorInterface
 
 
-class Scriptor:
+class Scriptor(ScriptorInterface):
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
     def ingest(self) -> pd.DataFrame:
-        url = "https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/facilities_csv_201901.zip"
-        df = pd.read_csv(url)
+        df = pd.read_csv(self.path)
         df = df[
             df.pgtable.str.contains(
                 "amtrak_facilities_sfpsd|bbpc_facilities_sfpsd|hrpt_facilities_sfpsd|"

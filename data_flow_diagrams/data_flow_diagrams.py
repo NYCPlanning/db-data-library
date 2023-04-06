@@ -14,9 +14,16 @@ from library import config
 
 Socrata = lambda name: Custom(name, './data_flow_diagrams/socrata.jpeg')
 
-all_sources = [ filename[:-4] for filename in os.listdir('./library/templates')]
+all_sources = [filename[:-4] for filename in os.listdir('./library/templates')]
 
-ztl_sources = [
+cbbr = [
+    "cbbr_submissions",
+    "dpr_parksproperties",
+    "dcp_facilities",
+    "doitt_buildingfootprints",
+]
+
+ztl = [
     "dcp_commercialoverlay",
     "dcp_limitedheight",
     "dcp_specialpurpose",
@@ -27,7 +34,7 @@ ztl_sources = [
     "dcp_zoningmapindex",
 ]
 
-pluto_sources = [
+pluto = [
     "dcp_commercialoverlay",
     "dcp_limitedheight",
     "dcp_specialpurpose",
@@ -59,6 +66,12 @@ pluto_sources = [
     "dof_condo",
 ]
 
+source_list = {
+    "cbbr": cbbr,
+    "ztl": ztl,
+    "pluto": pluto
+}
+
 overrides = {}
 
 path = lambda name: f"./library/templates/{name}.yml"
@@ -68,14 +81,16 @@ class source:
         if name in overrides:
             self.overrides = overrides[name]
         self.name = name
-        template = config.Config(path(name)).parsed_rendered_template()
-        self.dataset = template["dataset"]
-        self.source_type = self.dataset["source"]
-        self.destination = self.dataset["destination"]
+        config_obj = config.Config(path(name))
+        raw_template = config_obj.parsed_rendered_template()
+        #computed_template = config_obj.compute
+        self.config = raw_template
+        self.source_type = raw_template["dataset"]["source"]
 
     def source(self):
-        if "url" in self.source_type: 
-            path = self.source_type["url"]["path"]
+        if "url" in self.source_type or "path" in self.source_type: 
+            if "url" in self.source_type: path = self.source_type["url"]["path"]
+            else: path = self.source_type["path"]
             if path.startswith('http'): self.last_node = InternetAlt1(path.split("//")[1].split("/")[0])
             elif path.startswith('library'): self.last_node = client.User(path[12:])
             elif path.startswith('s3'): 
@@ -92,6 +107,11 @@ class source:
         else: raise Exception(f"No found source for {self.name}")
 
     def processing(self):
+        #print(self.source_type)
+        if "script" in self.source_type:
+            node = language.Python("script ingestion")
+            self.last_node >> node
+            self.last_node = node
         node = language.Bash("standard processing")
         self.last_node >> node
         self.last_node = node
@@ -102,16 +122,43 @@ class source:
         self.last_node = node
         self.do_node = node
 
-sources = [ source(s) for s in all_sources ]
+def create_specific_diagram(name, sources):
+    sources = [ source(s) for s in sources ]
+    with Diagram(name):
+        for s in sources: s.source()
 
-with Diagram(""):
-    for s in sources: s.source()
+        with Cluster("Library Archive"):
+            for s in sources: s.processing()
 
-    with Cluster("Library Archive"):
-        for s in sources: s.processing()
+        with Cluster("Digital Ocean"):
+            with Cluster("edm-recipes"):
+                #do = storage.Volume('edm-recipes')
+                for s in sources: s.do()
+        
+        data_product = SQL(name)
+        for s in sources: s.do_node >> data_product
 
-    with Cluster("Digital Ocean"):
-        with Cluster("edm-recipes"):
-            #do = storage.Volume('edm-recipes')
-            for s in sources: s.do()
-    
+def create_grand_diagram(names):
+    sources = set([i for name in names for i in source_list[name]])
+    sources = [ source(s) for s in sources ]
+    with Diagram("", direction="LR"):
+        for s in sources: s.source()
+
+        with Cluster("Library Archive"):
+            for s in sources: s.processing()
+
+        with Cluster("Digital Ocean"):
+            with Cluster("edm-recipes"):
+                #do = storage.Volume('edm-recipes')
+                for s in sources: s.do()
+        
+        for name in names:
+            data_product = SQL(name)
+            for s in sources:
+                if s.name in source_list[name]:
+                    s.do_node >> data_product
+
+
+create_specific_diagram("cbbr", cbbr)
+create_specific_diagram("pluto", pluto)
+#create_grand_diagram(["cbbr", "ztl"])

@@ -1,15 +1,15 @@
 import pandas as pd
 
 from . import get_json_content, df_to_tempfile
+from .scriptor import ScriptorInterface
 
 
-class Scriptor:
+class Scriptor(ScriptorInterface):
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
     def ingest(self) -> pd.DataFrame:
-        url = "https://refinery.nypl.org/api/nypl/locations/v1.0/locations"
-        records = get_json_content(url)["locations"]
+        records = get_json_content(self.path)["locations"]
         data = []
         for i in records:
             parsed = dict(

@@ -5,20 +5,15 @@ import pandas as pd
 import requests
 
 from . import df_to_tempfile
+from .scriptor import ScriptorInterface
 
 
-class Scriptor:
+class Scriptor(ScriptorInterface):
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
-
-    @property
-    def version(self):
-        return self.config["dataset"]["version"]
-
+        
     def ingest(self) -> pd.DataFrame:
-
-        url = f"https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/pad{self.version}.zip"
-        r = requests.get(url, stream=True)
+        r = requests.get(self.path, stream=True)
         with open(f"pad{self.version}.zip", "wb") as fd:
             for chunk in r.iter_content(chunk_size=128):
                 fd.write(chunk)

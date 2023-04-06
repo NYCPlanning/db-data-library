@@ -4,20 +4,18 @@ import requests
 import math
 
 from . import df_to_tempfile
+from .scriptor import ScriptorInterface
+
 def myfunc(n):
     if math.isnan(n):
         return ""
     else:
         return str(math.floor(n))
 
-class Scriptor:
+class Scriptor(ScriptorInterface):
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
-
-    @property
-    def version(self):
-        return self.config["dataset"]["version"]
-
+        
     def ingest(self) -> pd.DataFrame:
         url = f"https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/nyc_colp_csv_{self.version}.zip"
         r = requests.get(url, stream=True)

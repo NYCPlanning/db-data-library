@@ -4,6 +4,7 @@ dataset:
   acl: public-read
   source:
     script: *name
+    path: https://refinery.nypl.org/api/nypl/locations/v1.0/locations
     options:
       - "AUTODETECT_TYPE=NO"
       - "EMPTY_STRING_AS_NULL=YES"

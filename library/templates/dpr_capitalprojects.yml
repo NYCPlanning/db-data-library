@@ -4,6 +4,7 @@ dataset:
   acl: public-read
   source:
     script: *name
+    path: https://www.nycgovparks.org/bigapps/DPR_CapitalProjectTracker_001.json
     options:
       - "AUTODETECT_TYPE=NO"
       - "EMPTY_STRING_AS_NULL=YES"

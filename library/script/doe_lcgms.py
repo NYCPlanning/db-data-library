@@ -4,9 +4,10 @@ import pandas as pd
 import requests
 
 from . import df_to_tempfile
+from .scriptor import ScriptorInterface
 
 
-class Scriptor:
+class Scriptor(ScriptorInterface):
     """
     NOTE: 
     Dec 23, 2022 the ingest() has since being deprecated because the request endpoints and params are not stable.
@@ -30,10 +31,6 @@ class Scriptor:
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
-
-    @property
-    def version(self):
-        return self.config["dataset"]["version"]
 
     def ingest(self) -> pd.DataFrame:
         headers = {
@@ -60,7 +57,7 @@ class Scriptor:
         return df
     
     def ingest_csv(self):
-        df = pd.read_csv(f"library/tmp/LCGMS_SchoolData_{self.version}.csv", encoding="utf-8")
+        df = pd.read_csv(self.path, encoding="utf-8")
         return df
 
     def runner(self) -> str:
