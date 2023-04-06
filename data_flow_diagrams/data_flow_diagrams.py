@@ -1,34 +1,72 @@
-from diagrams import Diagram
+from diagrams import Diagram, Cluster
 from diagrams.onprem import client
 from diagrams.programming import flowchart
 from diagrams.programming import language
 from diagrams.generic.blank import Blank
+from diagrams.generic.database import SQL
 from diagrams.digitalocean import storage
 
-web = flowchart
+from library import config
+
+web = flowchart.OffPageConnectorRight
 manual = client.User
 
+source_names = [
+    "dcp_commercialoverlay",
+    "dcp_limitedheight",
+    "dcp_specialpurpose",
+    "dcp_specialpurposesubdistricts",
+    "dcp_zoningmapamendments",
+    "dof_dtm",
+    "dcp_zoningdistricts",
+    "dcp_zoningmapindex"
+]
+
+overrides = {}
+
+path = lambda name: f"./library/templates/{name}.yml"
+
+def library_archive(source_node):
+    processing_node = language.Python("Processing!")
+    source_node >> processing_node
+    return processing_node
+
+def do(source, source_node):
+    do_node = SQL(source)
+    source_node >> do_node
+    return do_node
+
+class source:
+    def __init__(self, name):
+        if source in overrides: return overrides[name]
+        self.name = name
+        template = config.Config(path(name)).parsed_rendered_template()
+        self.dataset = template["dataset"]
+        self.source_type = self.dataset["source"]
+        self.destination = self.dataset["destination"]
+
+    def source(self):
+        self.last_node = manual(self.name)
+
+    def processing(self):
+        node = language.Python("Processing!")
+        self.last_node >> node
+        self.last_node = node
+
+    def do(self):
+        node = SQL(self.name)
+        self.last_node >> node
+        self.last_node = node
+
+sources = [ source(s) for s in source_names ]
+
 with Diagram("ztl"):
-    dcp_commercialoverlay = manual("dcp_commercialoverlay")
-    dcp_limitedheight = flowchart.Document("dcp_limitedheight")
-    dcp_specialpurpose = flowchart.Document("dcp_specialpurpose")
-    dcp_specialpurposesubdistricts = flowchart.Document("dcp_specialpurposesubdistricts")
-    dcp_zoningmapamendments = flowchart.Document("dcp_zoningmapamendments")
-    dof_dtm = flowchart.Document("dof_dtm")
-    dcp_zoningdistricts = flowchart.Document("dcp_zoningdistricts")
-    dcp_zoningmapindex = flowchart.Document("dcp_zoningmapindex")
+    for s in sources: s.source()
 
-    do = storage.Volume('edm-recipes')
+    with Cluster("Library Archive"):
+        for s in sources: s.processing()
 
-    nodes = [ 
-        dcp_commercialoverlay,
-        dcp_limitedheight,
-        dcp_specialpurpose,
-        dcp_specialpurposesubdistricts,
-        dcp_zoningmapamendments,
-        dof_dtm,
-        dcp_zoningdistricts,
-        dcp_zoningmapindex,
-    ]
-    for node in nodes : 
-        node >> do
+    with Cluster("Digital Ocean"):
+        #do = storage.Volume('edm-recipes')
+        for s in sources: s.do()
+    
