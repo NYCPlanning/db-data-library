@@ -1,4 +1,5 @@
 import os
+from datetime import date
 from urllib.parse import urlparse
 
 
@@ -52,3 +53,19 @@ def format_url(path: str, subpath: str) -> str:
         return url.replace("s3://", "/vsis3/")
 
     return url
+
+def get_execution_details():
+    if os.environ.get("CI"):
+        return {
+            "type": "ci",
+            "dispatch_event": os.environ['GITHUB_EVENT_NAME'],
+            "url": f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}/jobs/{os.environ['GITHUB_JOB']}",
+            "date": date.today(),
+        }
+    else:
+        return {
+            "type": "manual",
+            "username": os.getlogin(),
+            "date": date.today(),
+        }
+    
