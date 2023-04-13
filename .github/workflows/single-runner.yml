@@ -34,5 +34,5 @@ jobs:
           poetry shell
           for format in pgdump shapefile csv
           do
-            library archive ${{ github.event.inputs.dataset }} -o $format --s3 --compress ${{ github.event.inputs.latest }} ${{ github.event.inputs.version }} &
+            library archive --name ${{ github.event.inputs.dataset }} -o $format --s3 --compress ${{ github.event.inputs.latest }} ${{ github.event.inputs.version }} &
           done
