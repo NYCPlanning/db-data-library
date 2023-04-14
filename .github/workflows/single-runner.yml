@@ -34,8 +34,7 @@ jobs:
           poetry install
       - name: Archive ${{ github.event.inputs.dataset }}
         run: |
-          poetry shell
           for format in pgdump shapefile csv
           do
-            library archive --name ${{ github.event.inputs.dataset }} -o $format --s3 --compress ${{ github.event.inputs.latest }} ${{ github.event.inputs.version }} &
+            poetry run library archive --name ${{ github.event.inputs.dataset }} -o $format --s3 --compress ${{ github.event.inputs.latest }} ${{ github.event.inputs.version }} &
           done
