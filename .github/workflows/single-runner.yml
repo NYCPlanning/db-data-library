@@ -19,7 +19,7 @@ jobs:
   dataloading:
     runs-on: ubuntu-20.04
     container:
-      image: 'Dockerfile'
+      image: osgeo/gdal:ubuntu-small-3.6.1
       env:
         AWS_S3_ENDPOINT: ${{ secrets.DO_S3_ENDPOINT }}
         AWS_ACCESS_KEY_ID: ${{ secrets.DO_ACCESS_KEY_ID }}
@@ -27,6 +27,11 @@ jobs:
         AWS_S3_BUCKET: edm-recipes
     steps:
       - uses: actions/checkout@v2.3.4
+      - name: env setup
+        run: | 
+          apt update && apt install -y python3-pip python3-distutils git
+          python3 -m pip install poetry
+          poetry install
       - name: Archive ${{ github.event.inputs.dataset }}
         run: |
           poetry shell
