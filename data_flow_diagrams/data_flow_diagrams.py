@@ -91,7 +91,10 @@ class source:
         if "url" in self.source_type or "path" in self.source_type: 
             if "url" in self.source_type: path = self.source_type["url"]["path"]
             else: path = self.source_type["path"]
-            if path.startswith('http'): self.last_node = InternetAlt1(path.split("//")[1].split("/")[0])
+            if path.startswith('http'): 
+                split_path=path.split("//")[1].split("/")
+                print(split_path)
+                self.last_node = InternetAlt1(split_path[0] + "\n" + split_path[-1])
             elif path.startswith('library'): self.last_node = client.User(path[12:])
             elif path.startswith('s3'): 
                 s3path = path[5:]
@@ -161,4 +164,6 @@ def create_grand_diagram(names):
 
 create_specific_diagram("cbbr", cbbr)
 create_specific_diagram("pluto", pluto)
+create_specific_diagram("ztl", ztl)
+
 #create_grand_diagram(["cbbr", "ztl"])
