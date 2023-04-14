@@ -61,7 +61,8 @@ def get_execution_details():
         return {
             "type": "ci",
             "dispatch_event": os.environ['GITHUB_EVENT_NAME'],
-            "url": f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}/jobs/{os.environ['GITHUB_JOB']}",
+            "url": f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}",
+            "job": os.environ['GITHUB_JOB'],
             "date": today,
         }
     else:
