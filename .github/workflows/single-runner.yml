@@ -34,7 +34,9 @@ jobs:
           poetry install
       - name: Archive ${{ github.event.inputs.dataset }}
         run: |
+          if [ "${{ github.event.inputs.latest }}" = "true" ] ; then latest="--latest"; else latest=''; fi
+          if [ "${{ github.event.inputs.version }}" != "" ] ; then version="--version $7"; else version=''; fi
           for format in pgdump shapefile csv
           do
-            poetry run library archive --name ${{ github.event.inputs.dataset }} -o $format --s3 --compress ${{ github.event.inputs.latest }} ${{ github.event.inputs.version }} &
+            poetry run library archive --name ${{ github.event.inputs.dataset }} -o $format --s3 --compress $latest $version &
           done
