@@ -7,9 +7,12 @@ on:
         type: choice
         description: Name of release
         required: true
+        default: ubuntu-latest
         options:
           - ubuntu-staging
           - ubuntu-latest
+  push:
+    branches: main
 
 jobs:
   update_image:
