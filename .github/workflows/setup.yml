@@ -1,7 +1,7 @@
 on: workflow_call
 
 jobs:
-  Setup:
+  setup:
     runs-on: ubuntu-20.04
     container:
       image: osgeo/gdal:ubuntu-small-3.6.1
@@ -17,3 +17,15 @@ jobs:
           apt update && apt install -y python3-pip python3-distutils git
           python3 -m pip install poetry
           poetry install
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          tags: myimage:latest
+          outputs: type=docker,dest=/tmp/myimage.tar
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: myimage
+          path: /tmp/myimage.tar
