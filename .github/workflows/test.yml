@@ -10,8 +10,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-20.04
-    container:
-      image: Dockerfile
+    using: 'docker'
+    image: Dockerfile
     env:
       RECIPE_ENGINE: ${{ secrets.RECIPE_ENGINE }}
       AWS_S3_ENDPOINT: ${{ secrets.DO_S3_ENDPOINT }}
