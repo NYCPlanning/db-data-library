@@ -10,7 +10,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-20.04
-    container: osgeo/gdal:ubuntu-small-3.6.1
+    container:
+      image: Dockerfile
     env:
       RECIPE_ENGINE: ${{ secrets.RECIPE_ENGINE }}
       AWS_S3_ENDPOINT: ${{ secrets.DO_S3_ENDPOINT }}
