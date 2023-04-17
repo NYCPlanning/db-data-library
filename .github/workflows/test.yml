@@ -27,9 +27,7 @@ jobs:
         poetry install
 
     - name: Pytest
-      shell: bash
       run: |
-        source ~/.bashrc
         poetry run pytest -s
 
   docker:
