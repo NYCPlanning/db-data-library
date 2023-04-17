@@ -38,8 +38,6 @@ jobs:
           latest: ${{ github.event.inputs.latest == 'true' && '--latest' || ' ' }}
           version: ${{ github.event.inputs.version || ' ' }}
         run: |
-          echo $latest
-          echo $version
           poetry run library archive --name ${{ github.event.inputs.dataset }} -o pgdump --s3 --compress $latest $version
           poetry run library archive --name ${{ github.event.inputs.dataset }} -o shapefile --s3 --compress $latest $version
           poetry run library archive --name ${{ github.event.inputs.dataset }} -o csv --s3 --compress $latest $version
