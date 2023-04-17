@@ -32,3 +32,59 @@ jobs:
         run: docker build -t $image_tag .
       - name: Publish Tag
         run: docker push $image_tag
+
+  update_docs:
+    needs: update_image
+    runs-on: ubuntu-20.04
+    container: osgeo/gdal:ubuntu-small-3.6.1
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up GDAL and poetry
+      run: |
+        apt update
+        apt install -y git python3-pip
+
+    - name: Install Python dependencies, create docs
+      run: |
+        python3.10 -m pip install --upgrade pip
+        python3.10 -m pip install .
+        python3.10 -m pip install pdoc3
+        python3.10 -m pdoc -f -o docs --html library
+
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: docs
+        path: docs/library
+        
+  commit:
+    runs-on: ubuntu-20.04
+    needs: create_docs
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/download-artifact@v2
+      with:
+        name: docs
+        path: docs/library
+
+    - name: Commit files
+      continue-on-error: true
+      id: commit
+      run: |
+        ls -l docs/
+        ls -l docs/library
+        git status
+
+        DATE=$(date)
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add docs/
+        git commit -m "🎉 Update Docs $DATE" -a
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      continue-on-error: true
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
