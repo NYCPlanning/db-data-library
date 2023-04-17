@@ -1,6 +1,6 @@
 import os
 import subprocess
-from datetime import date
+from datetime import datetime
 from urllib.parse import urlparse
 
 
@@ -56,17 +56,20 @@ def format_url(path: str, subpath: str) -> str:
     return url
 
 def get_execution_details():
-    timestamp = date.today().strftime("%Y-%m-%d %H:%M:%S")
+    def try_func(func):
+        try: return func()
+        except: return "could not parse"
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if os.environ.get("CI"):
         return {
             "type": "ci",
-            "dispatch_event": os.environ['GITHUB_EVENT_NAME'],
-            "url": f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}",
-            "job": os.environ['GITHUB_JOB'],
+            "dispatch_event": try_func(lambda: os.environ['GITHUB_EVENT_NAME']),
+            "url": try_func(lambda: f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}"),
+            "job": try_func(lambda: os.environ['GITHUB_JOB']),
             "timestamp": timestamp,
-        }
+            }
     else:
-        git_user = subprocess.run(["git", "config", "user.name"], stdout=subprocess.PIPE).stdout.strip().decode()
+        git_user = try_func(subprocess.run(["git", "config", "user.name"], stdout=subprocess.PIPE).stdout.strip().decode)
         return {
             "type": "manual",
             "user": git_user,
