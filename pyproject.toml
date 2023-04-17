@@ -21,6 +21,7 @@ pydantic = "^1.8.1"
 usaddress = "^0.5.10"
 xlrd = "^2.0.1"
 openpyxl = "^3.0.7"
+pytz = "^2023.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0"

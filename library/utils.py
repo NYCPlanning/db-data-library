@@ -1,6 +1,7 @@
 import os
 import subprocess
 from datetime import datetime
+import pytz
 from urllib.parse import urlparse
 
 
@@ -59,7 +60,7 @@ def get_execution_details():
     def try_func(func):
         try: return func()
         except: return "could not parse"
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = datetime.now(pytz.timezone('America/New_York')).strftime("%Y-%m-%d %H:%M:%S")
     if os.environ.get("CI"):
         return {
             "type": "ci",
