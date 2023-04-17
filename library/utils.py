@@ -56,20 +56,20 @@ def format_url(path: str, subpath: str) -> str:
     return url
 
 def get_execution_details():
-    today = date.today().strftime("%Y-%m-%d")
+    timestamp = date.today().strftime("%Y-%m-%d %H:%M:%S")
     if os.environ.get("CI"):
         return {
             "type": "ci",
             "dispatch_event": os.environ['GITHUB_EVENT_NAME'],
             "url": f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}",
             "job": os.environ['GITHUB_JOB'],
-            "date": today,
+            "timestamp": timestamp,
         }
     else:
         git_user = subprocess.run(["git", "config", "user.name"], stdout=subprocess.PIPE).stdout.strip().decode()
         return {
             "type": "manual",
             "user": git_user,
-            "date": today,
+            "timestamp": timestamp,
         }
     
