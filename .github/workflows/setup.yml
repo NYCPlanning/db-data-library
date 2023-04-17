@@ -11,21 +11,21 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.DO_SECRET_ACCESS_KEY }}
         AWS_S3_BUCKET: edm-recipes
     steps:
-      - uses: actions/checkout@v2.3.4
-      - name: env setup
-        run: | 
-          apt update && apt install -y python3-pip python3-distutils git
-          python3 -m pip install poetry
-          poetry install
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile
-          tags: myimage:latest
-          outputs: type=docker,dest=/tmp/myimage.tar
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: myimage
-          path: /tmp/myimage.tar
+    - uses: actions/checkout@v2.3.4
+    - name: env setup
+      run: | 
+        apt update && apt install -y python3-pip python3-distutils git
+        python3 -m pip install poetry
+        poetry install
+    - name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./Dockerfile
+        tags: myimage:latest
+        outputs: type=docker,dest=/tmp/myimage.tar
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: myimage
+        path: /tmp/myimage.tar
