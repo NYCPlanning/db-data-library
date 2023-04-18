@@ -23,7 +23,7 @@ jobs:
       image_tag: nycplanning/library:${{ github.event.inputs.image_tag}}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: docker-practice/actions-setup-docker@1.0.11
       - name: Log in to docker
@@ -39,7 +39,7 @@ jobs:
     container: osgeo/gdal:ubuntu-small-3.6.1
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up GDAL and poetry
       run: |
@@ -54,7 +54,7 @@ jobs:
         python3.10 -m pdoc -f -o docs --html library
 
     - name: Archive artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: docs
         path: docs/library
@@ -63,8 +63,8 @@ jobs:
     runs-on: ubuntu-20.04
     needs: create_docs
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/download-artifact@v2
+    - uses: actions/checkout@v3
+    - uses: actions/download-artifact@v3
       with:
         name: docs
         path: docs/library

@@ -27,7 +27,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.DO_SECRET_ACCESS_KEY }}
         AWS_S3_BUCKET: edm-recipes
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v3
       - name: env setup
         run: | 
           apt update && apt install -y python3-pip python3-distutils git
