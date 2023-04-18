@@ -12,7 +12,6 @@ on:
           - ubuntu-staging
           - ubuntu-latest
   push:
-    branches: main
 
 jobs:
   update_image:
@@ -20,7 +19,7 @@ jobs:
     env:
       AW_DOCKER_USERNAME: ${{ secrets.AW_Docker_Username }}
       AW_DOCKER_PASSWORD: ${{ secrets.AW_Docker_Password }}
-      image_tag: nycplanning/library:${{ github.event.inputs.image_tag}}
+      image_tag: nycplanning/library:${{ github.event.inputs.image_tag || 'ubuntu-staging' }}
 
     steps:
       - uses: actions/checkout@v3
