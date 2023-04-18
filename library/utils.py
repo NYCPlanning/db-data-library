@@ -64,9 +64,9 @@ def get_execution_details():
     if os.environ.get("CI"):
         return {
             "type": "ci",
-            "dispatch_event": try_func(lambda: os.environ['GITHUB_EVENT_NAME']),
+            "dispatch_event": os.environ.get("GITHUB_EVENT_NAME", "could not parse"),
             "url": try_func(lambda: f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}"),
-            "job": try_func(lambda: os.environ['GITHUB_JOB']),
+            "job": os.environ.get("GITHUB_JOB", "could not parse"),
             "timestamp": timestamp,
             }
     else:
