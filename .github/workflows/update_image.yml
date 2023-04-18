@@ -7,7 +7,6 @@ on:
         type: choice
         description: Name of release
         required: true
-        default: ubuntu-latest
         options:
           - ubuntu-staging
           - ubuntu-latest
@@ -20,7 +19,7 @@ jobs:
     env:
       AW_DOCKER_USERNAME: ${{ secrets.AW_Docker_Username }}
       AW_DOCKER_PASSWORD: ${{ secrets.AW_Docker_Password }}
-      image_tag: nycplanning/library:${{ github.event.inputs.image_tag}}
+      image_tag: nycplanning/library:${{ github.event.inputs.image_tag || 'ubuntu-latest' }}
 
     steps:
       - uses: actions/checkout@v3
