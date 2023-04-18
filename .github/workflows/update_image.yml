@@ -7,9 +7,12 @@ on:
         type: choice
         description: Name of release
         required: true
+        default: ubuntu-latest
         options:
           - ubuntu-staging
           - ubuntu-latest
+  push:
+    branches: main
 
 jobs:
   update_image:
@@ -20,7 +23,7 @@ jobs:
       image_tag: nycplanning/library:${{ github.event.inputs.image_tag}}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: docker-practice/actions-setup-docker@1.0.11
       - name: Log in to docker
@@ -29,3 +32,59 @@ jobs:
         run: docker build -t $image_tag .
       - name: Publish Tag
         run: docker push $image_tag
+
+  update_docs:
+    needs: update_image
+    runs-on: ubuntu-20.04
+    container: osgeo/gdal:ubuntu-small-3.6.1
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up GDAL and poetry
+      run: |
+        apt update
+        apt install -y git python3-pip
+
+    - name: Install Python dependencies, create docs
+      run: |
+        python3.10 -m pip install --upgrade pip
+        python3.10 -m pip install .
+        python3.10 -m pip install pdoc3
+        python3.10 -m pdoc -f -o docs --html library
+
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: docs
+        path: docs/library
+        
+  commit:
+    runs-on: ubuntu-20.04
+    needs: create_docs
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/download-artifact@v3
+      with:
+        name: docs
+        path: docs/library
+
+    - name: Commit files
+      continue-on-error: true
+      id: commit
+      run: |
+        ls -l docs/
+        ls -l docs/library
+        git status
+
+        DATE=$(date)
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add docs/
+        git commit -m "🎉 Update Docs $DATE" -a
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      continue-on-error: true
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}

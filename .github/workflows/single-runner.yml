@@ -8,6 +8,7 @@ on:
         required: true
         default: dcp_mappluto
       latest:
+        type: boolean
         description: "Tag this version as latest (optional)"
         required: false
         default: "true"
@@ -15,24 +16,29 @@ on:
         description: "The version of the dataset (i.e. 22v2, 21C) if needed (optional)"
         required: false
 
-
-
 jobs:
   dataloading:
     runs-on: ubuntu-20.04
-    env:
-      AWS_S3_ENDPOINT: ${{ secrets.DO_S3_ENDPOINT }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.DO_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.DO_SECRET_ACCESS_KEY }}
-      AWS_S3_BUCKET: edm-recipes
+    container:
+      image: osgeo/gdal:ubuntu-small-3.6.1
+      env:
+        AWS_S3_ENDPOINT: ${{ secrets.DO_S3_ENDPOINT }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.DO_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.DO_SECRET_ACCESS_KEY }}
+        AWS_S3_BUCKET: edm-recipes
     steps:
-      - uses: actions/checkout@v2.3.4
-      - uses: NYCPlanning/action-library-archive@v1.1
-        name: Archive ${{ github.event.inputs.dataset }}
-        with:
-          name: ${{ github.event.inputs.dataset }}
-          latest: ${{ github.event.inputs.latest }}
-          version: ${{ github.event.inputs.version }}
-          s3: true
-          compress: true
-          output_format: pgdump shapefile csv
+      - uses: actions/checkout@v3
+      - name: env setup
+        run: | 
+          apt update && apt install -y python3-pip python3-distutils git
+          python3 -m pip install poetry
+          poetry install
+      - name: Archive ${{ github.event.inputs.dataset }}
+        env:
+          latest: ${{ github.event.inputs.latest == 'true' && '--latest' || ' ' }}
+          version: ${{ github.event.inputs.version || ' ' }}
+        run: |
+          poetry run library archive --name ${{ github.event.inputs.dataset }} -o pgdump --s3 --compress $latest $version
+          poetry run library archive --name ${{ github.event.inputs.dataset }} -o shapefile --s3 --compress $latest $version
+          poetry run library archive --name ${{ github.event.inputs.dataset }} -o csv --s3 --compress $latest $version
+          
