@@ -6,7 +6,7 @@ import requests
 import yaml
 from jinja2 import Template
 
-from .utils import format_url
+from .utils import format_url, get_execution_details
 from .validator import Validator
 
 
@@ -103,6 +103,8 @@ class Config:
                 "options": options,
                 "geometry": geometry,
             }
+            
+            config["execution_details"] = get_execution_details()
 
         if self.source_type == "url":
             # Load unrendered template to check for yml-specified

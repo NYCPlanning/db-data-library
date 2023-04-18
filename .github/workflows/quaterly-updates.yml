@@ -47,7 +47,7 @@ jobs:
           - dcp_policeprecincts
           - dcp_school_districts
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v3
       - uses: NYCPlanning/action-library-archive@v1.1
         with:
           name: ${{ matrix.dataset }}
