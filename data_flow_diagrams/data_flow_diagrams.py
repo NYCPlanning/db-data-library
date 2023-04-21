@@ -12,7 +12,7 @@ from diagrams.aws.general import InternetAlt1
 
 from library import config
 
-Socrata = lambda name: Custom(name, './data_flow_diagrams/socrata.jpeg')
+Socrata = lambda name: Custom(name, './data_flow_diagrams/resources/socrata.jpeg')
 
 all_sources = [filename[:-4] for filename in os.listdir('./library/templates')]
 
@@ -93,7 +93,6 @@ class source:
             else: path = self.source_type["path"]
             if path.startswith('http'): 
                 split_path=path.split("//")[1].split("/")
-                print(split_path)
                 self.last_node = InternetAlt1(split_path[0] + "\n" + split_path[-1])
             elif path.startswith('library'): self.last_node = client.User(path[12:])
             elif path.startswith('s3'): 
@@ -110,7 +109,6 @@ class source:
         else: raise Exception(f"No found source for {self.name}")
 
     def processing(self):
-        #print(self.source_type)
         if "script" in self.source_type:
             node = language.Python("script ingestion")
             self.last_node >> node
@@ -127,7 +125,7 @@ class source:
 
 def create_specific_diagram(name, sources):
     sources = [ source(s) for s in sources ]
-    with Diagram(name):
+    with Diagram(name, filename=f'./data_flow_diagrams/outputs/{name}'):
         for s in sources: s.source()
 
         with Cluster("Library Archive"):
@@ -144,7 +142,7 @@ def create_specific_diagram(name, sources):
 def create_grand_diagram(names):
     sources = set([i for name in names for i in source_list[name]])
     sources = [ source(s) for s in sources ]
-    with Diagram("", direction="LR"):
+    with Diagram("", direction="LR", filename='./data_flow_diagrams/outputs/full_diagram'):
         for s in sources: s.source()
 
         with Cluster("Library Archive"):
@@ -160,7 +158,6 @@ def create_grand_diagram(names):
             for s in sources:
                 if s.name in source_list[name]:
                     s.do_node >> data_product
-
 
 create_specific_diagram("cbbr", cbbr)
 create_specific_diagram("pluto", pluto)
