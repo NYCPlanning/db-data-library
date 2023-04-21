@@ -4,7 +4,7 @@ from library.archive import Archive
 
 from . import pg, recipe_engine, test_root_path
 
-a = Archive()
+archive = Archive()
 
 
 def start_clean(local_files: list, s3_files: list):
@@ -12,8 +12,8 @@ def start_clean(local_files: list, s3_files: list):
         if os.path.isfile(f):
             os.remove(f)
     for f in s3_files:
-        if a.s3.exists(f):
-            a.s3.rm(f)
+        if archive.s3.exists(f):
+            archive.s3.rm(f)
 
 
 def test_archive_1():
@@ -31,7 +31,7 @@ def test_archive_1():
         "datasets/nypl_libraries/latest/config.json",
     ]
     start_clean(local_not_exist, s3_exist)
-    a(
+    archive(
         f"{test_root_path}/data/nypl_libraries.yml",
         output_format="csv",
         push=True,
@@ -42,7 +42,7 @@ def test_archive_1():
     for f in local_not_exist:
         assert not os.path.isfile(f)
     for f in s3_exist:
-        assert a.s3.exists(f)
+        assert archive.s3.exists(f)
     start_clean(local_not_exist, s3_exist)
 
 
@@ -64,7 +64,7 @@ def test_archive_2():
         ".library/datasets/nypl_libraries/20210122/config.json",
     ]
     start_clean(local_exist, s3_not_exist)
-    a(
+    archive(
         f"{test_root_path}/data/nypl_libraries.yml",
         output_format="geojson",
         push=False,
@@ -73,14 +73,14 @@ def test_archive_2():
         compress=True,
     )
     for f in s3_not_exist:
-        assert not a.s3.exists(f)
+        assert not archive.s3.exists(f)
     for f in local_exist:
         assert os.path.isfile(f)
     start_clean(local_exist, s3_not_exist)
 
 
 def test_archive_3():
-    a(
+    archive(
         f"{test_root_path}/data/nypl_libraries.yml",
         output_format="postgres",
         postgres_url=recipe_engine,
@@ -122,7 +122,7 @@ def test_archive_4():
     ]
     local_not_exist = [".library/datasets/nypl_libraries/testor/nypl_libraries.csv.zip"]
     start_clean(local_exist + local_not_exist, s3_exist + s3_not_exist)
-    a(
+    archive(
         f"{test_root_path}/data/nypl_libraries.yml",
         output_format="csv",
         push=True,
@@ -136,9 +136,9 @@ def test_archive_4():
     for f in local_not_exist:
         assert not os.path.isfile(f)
     for f in s3_exist:
-        assert a.s3.exists(f)
+        assert archive.s3.exists(f)
     for f in s3_not_exist:
-        assert not a.s3.exists(f)
+        assert not archive.s3.exists(f)
     start_clean(local_exist + local_not_exist, s3_exist + s3_not_exist)
 
 
@@ -162,7 +162,7 @@ def test_archive_5():
     ]
     local_not_exist = [".library/datasets/nypl_libraries/testor/nypl_libraries.csv.zip"]
     start_clean(local_exist + local_not_exist, s3_exist + s3_not_exist)
-    a(
+    archive(
         name="nypl_libraries",
         output_format="csv",
         push=True,
@@ -176,9 +176,9 @@ def test_archive_5():
     for f in local_not_exist:
         assert not os.path.isfile(f)
     for f in s3_exist:
-        assert a.s3.exists(f)
+        assert archive.s3.exists(f)
     for f in s3_not_exist:
-        assert not a.s3.exists(f)
+        assert not archive.s3.exists(f)
     start_clean(local_exist + local_not_exist, s3_exist + s3_not_exist)
 
 
@@ -198,7 +198,7 @@ def test_archive_6():
     ]
     local_exist = [".library/datasets/nypl_libraries/20210122/nypl_libraries.shp.zip"]
     start_clean(local_exist + local_not_exist, s3_exist + s3_not_exist)
-    a(
+    archive(
         f"{test_root_path}/data/nypl_libraries.yml",
         output_format="shapefile",
         push=True,
@@ -210,7 +210,7 @@ def test_archive_6():
     for f in local_not_exist:
         assert not os.path.isfile(f)
     for f in s3_exist:
-        assert a.s3.exists(f)
+        assert archive.s3.exists(f)
     for f in s3_not_exist:
-        assert not a.s3.exists(f)
+        assert not archive.s3.exists(f)
     start_clean(local_exist + local_not_exist, s3_exist + s3_not_exist)
