@@ -81,7 +81,6 @@ class Ingestor:
                 self.write_config(f"{folder_path}/config.yml", c.compute_yml)
                 output_files.append(f"{folder_path}/config.json")
                 output_files.append(f"{folder_path}/config.yml")
-            print("Starting gdal.VectorTranslate ...")
             # Initiate vector translate
             with Progress(
                 SpinnerColumn(spinner_name="earth"),
@@ -89,7 +88,7 @@ class Ingestor:
                 BarColumn(bar_width=30),
                 TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
                 TimeRemainingColumn(),
-                transient=True,
+                transient=False,
             ) as progress:
                 task = progress.add_task(
                     f"[green]Ingesting [bold]{destination['name']}[/bold]", total=1000
@@ -116,7 +115,6 @@ class Ingestor:
                     callback=update_progress,
                 )
 
-            print("Done with gdal.VectorTranslate")
             # Compression if needed
             if compress and destination_path:
                 if output_format == "ESRI Shapefile":
