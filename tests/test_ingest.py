@@ -4,63 +4,66 @@ from library.ingest import Ingestor
 
 from . import pg, recipe_engine, test_root_path
 
+TEST_DATASET_NAME = "test_nypl_libraries"
+TEST_DATASET_VERSION = "20210122"
+TEST_DATASET_CONFIG_FILE = f"{test_root_path}/data/{TEST_DATASET_NAME}.yml"
+TEST_DATASET_OUTPUT_PATH = ""
 
 def test_ingest_postgres():
     ingestor = Ingestor()
     ingestor.postgres(
-        f"{test_root_path}/data/nypl_libraries.yml", postgres_url=recipe_engine
+        TEST_DATASET_CONFIG_FILE, postgres_url=recipe_engine
     )
-    table_name = "test_nypl_libraries"
     sql = f"""
     SELECT EXISTS (
         SELECT FROM information_schema.tables
         WHERE  table_schema = 'public'
-        AND    table_name   = '{table_name}'
+        AND    table_name   = '{TEST_DATASET_NAME}'
     );
     """
     result = pg.execute(sql).fetchall()
-    assert result[0][0], f"{table_name} is not in postgres database yet"
+    assert result[0][0], f"{TEST_DATASET_NAME} is not in postgres database yet"
 
     # Clean up
     if result[0][0]:
-        pg.execute(f"DROP TABLE IF EXISTS {table_name};")
+        pg.execute(f"DROP TABLE IF EXISTS {TEST_DATASET_NAME};")
     result = pg.execute(sql).fetchall()
     assert not result[0][0], "clean up failed"
 
 
 def test_ingest_csv():
     ingestor = Ingestor()
-    ingestor.csv(f"{test_root_path}/data/nypl_libraries.yml", compress=True)
+    ingestor.csv(TEST_DATASET_CONFIG_FILE, compress=True)
     assert os.path.isfile(
-        ".library/datasets/nypl_libraries/20210122/nypl_libraries.csv"
+        f".library/datasets/{TEST_DATASET_NAME}/{TEST_DATASET_VERSION}/{TEST_DATASET_NAME}.csv"
     )
 
 
 def test_ingest_pgdump():
     ingestor = Ingestor()
-    ingestor.pgdump(f"{test_root_path}/data/nypl_libraries.yml", compress=True)
+    ingestor.pgdump(TEST_DATASET_CONFIG_FILE, compress=True)
     assert os.path.isfile(
-        ".library/datasets/nypl_libraries/20210122/nypl_libraries.sql"
+        f".library/datasets/{TEST_DATASET_NAME}/{TEST_DATASET_VERSION}/{TEST_DATASET_NAME}.sql"
     )
 
 
 def test_ingest_geojson():
     ingestor = Ingestor()
-    ingestor.geojson(f"{test_root_path}/data/nypl_libraries.yml", compress=True)
+    ingestor.geojson(TEST_DATASET_CONFIG_FILE, compress=True)
     assert os.path.isfile(
-        ".library/datasets/nypl_libraries/20210122/nypl_libraries.geojson"
+        f".library/datasets/{TEST_DATASET_NAME}/{TEST_DATASET_VERSION}/{TEST_DATASET_NAME}.geojson"
     )
 
 
 def test_ingest_shapefile():
     ingestor = Ingestor()
-    ingestor.shapefile(f"{test_root_path}/data/nypl_libraries.yml")
+    ingestor.shapefile(TEST_DATASET_CONFIG_FILE)
     assert os.path.isfile(
-        ".library/datasets/nypl_libraries/20210122/nypl_libraries.shp.zip"
+        f".library/datasets/{TEST_DATASET_NAME}/{TEST_DATASET_VERSION}/{TEST_DATASET_NAME}.shp.zip"
     )
 
 
 def test_ingest_version_overwrite():
     ingestor = Ingestor()
-    ingestor.csv(f"{test_root_path}/data/nypl_libraries.yml", version="test")
-    assert os.path.isfile(".library/datasets/nypl_libraries/test/nypl_libraries.csv")
+    ingestor.csv(TEST_DATASET_CONFIG_FILE, version="test")
+    assert os.path.isfile(f".library/datasets/{TEST_DATASET_NAME}/test/{TEST_DATASET_NAME}.csv")
