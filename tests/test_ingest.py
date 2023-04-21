@@ -7,7 +7,7 @@ from . import pg, recipe_engine, test_root_path
 TEST_DATASET_NAME = "test_nypl_libraries"
 TEST_DATASET_VERSION = "20210122"
 TEST_DATASET_CONFIG_FILE = f"{test_root_path}/data/{TEST_DATASET_NAME}.yml"
-TEST_DATASET_OUTPUT_PATH = ""
+TEST_DATASET_OUTPUT_PATH = f".library/datasets/{TEST_DATASET_NAME}/{TEST_DATASET_VERSION}/{TEST_DATASET_NAME}"
 
 def test_ingest_postgres():
     ingestor = Ingestor()
@@ -35,7 +35,7 @@ def test_ingest_csv():
     ingestor = Ingestor()
     ingestor.csv(TEST_DATASET_CONFIG_FILE, compress=True)
     assert os.path.isfile(
-        f".library/datasets/{TEST_DATASET_NAME}/{TEST_DATASET_VERSION}/{TEST_DATASET_NAME}.csv"
+        f"{TEST_DATASET_OUTPUT_PATH}.csv"
     )
 
 
@@ -43,7 +43,7 @@ def test_ingest_pgdump():
     ingestor = Ingestor()
     ingestor.pgdump(TEST_DATASET_CONFIG_FILE, compress=True)
     assert os.path.isfile(
-        f".library/datasets/{TEST_DATASET_NAME}/{TEST_DATASET_VERSION}/{TEST_DATASET_NAME}.sql"
+        f"{TEST_DATASET_OUTPUT_PATH}.sql"
     )
 
 
@@ -51,7 +51,7 @@ def test_ingest_geojson():
     ingestor = Ingestor()
     ingestor.geojson(TEST_DATASET_CONFIG_FILE, compress=True)
     assert os.path.isfile(
-        f".library/datasets/{TEST_DATASET_NAME}/{TEST_DATASET_VERSION}/{TEST_DATASET_NAME}.geojson"
+        f"{TEST_DATASET_OUTPUT_PATH}.geojson"
     )
 
 
@@ -59,11 +59,12 @@ def test_ingest_shapefile():
     ingestor = Ingestor()
     ingestor.shapefile(TEST_DATASET_CONFIG_FILE)
     assert os.path.isfile(
-        f".library/datasets/{TEST_DATASET_NAME}/{TEST_DATASET_VERSION}/{TEST_DATASET_NAME}.shp.zip"
+        f"{TEST_DATASET_OUTPUT_PATH}.shp.zip"
     )
 
 
 def test_ingest_version_overwrite():
+    version_overwrite = "test_version"
     ingestor = Ingestor()
-    ingestor.csv(TEST_DATASET_CONFIG_FILE, version="test")
-    assert os.path.isfile(f".library/datasets/{TEST_DATASET_NAME}/test/{TEST_DATASET_NAME}.csv")
+    ingestor.csv(TEST_DATASET_CONFIG_FILE, version=version_overwrite)
+    assert os.path.isfile(f".library/datasets/{TEST_DATASET_NAME}/{version_overwrite}/{TEST_DATASET_NAME}.csv")
