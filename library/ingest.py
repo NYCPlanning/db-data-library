@@ -81,7 +81,7 @@ class Ingestor:
                 self.write_config(f"{folder_path}/config.yml", c.compute_yml)
                 output_files.append(f"{folder_path}/config.json")
                 output_files.append(f"{folder_path}/config.yml")
-
+            print("Starting gdal.VectorTranslate ...")
             # Initiate vector translate
             with Progress(
                 SpinnerColumn(spinner_name="earth"),
@@ -98,6 +98,7 @@ class Ingestor:
                 def update_progress(complete, message, unknown):
                     progress.update(task, completed=floor(complete * 1000))
 
+                gdal.UseExceptions()
                 gdal.VectorTranslate(
                     dstDS,
                     srcDS,
@@ -115,6 +116,7 @@ class Ingestor:
                     callback=update_progress,
                 )
 
+            print("Done with gdal.VectorTranslate")
             # Compression if needed
             if compress and destination_path:
                 if output_format == "ESRI Shapefile":
