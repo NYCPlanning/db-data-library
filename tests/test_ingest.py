@@ -10,19 +10,20 @@ def test_ingest_postgres():
     ingestor.postgres(
         f"{test_root_path}/data/nypl_libraries.yml", postgres_url=recipe_engine
     )
-    sql = """
+    table_name = "test_nypl_libraries"
+    sql = f"""
     SELECT EXISTS (
         SELECT FROM information_schema.tables
         WHERE  table_schema = 'public'
-        AND    table_name   = 'nypl_libraries'
+        AND    table_name   = '{table_name}'
     );
     """
     result = pg.execute(sql).fetchall()
-    assert result[0][0], "nypl_libraries is not in postgres database yet"
+    assert result[0][0], f"{table_name} is not in postgres database yet"
 
     # Clean up
     if result[0][0]:
-        pg.execute("DROP TABLE IF EXISTS nypl_libraries;")
+        pg.execute(f"DROP TABLE IF EXISTS {table_name};")
     result = pg.execute(sql).fetchall()
     assert not result[0][0], "clean up failed"
 

@@ -1,5 +1,5 @@
 dataset:
-  name: &name nypl_libraries
+  name: &name test_nypl_libraries
   version: "20210122"
   acl: public-read
   source:
