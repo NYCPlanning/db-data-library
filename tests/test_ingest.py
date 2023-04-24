@@ -14,21 +14,18 @@ def test_ingest_postgres():
     ingestor.postgres(
         TEST_DATASET_CONFIG_FILE, postgres_url=recipe_engine
     )
-    sql = f"""
-    SELECT EXISTS (
-        SELECT FROM information_schema.tables
-        WHERE  table_schema = 'public'
-        AND    table_name   = '{TEST_DATASET_NAME}'
-    );
-    """
-    result = pg.execute(sql).fetchall()
-    assert result[0][0], f"{TEST_DATASET_NAME} is not in postgres database yet"
+    for version in [TEST_DATASET_VERSION, "latest"]:
+        sql = f"""
+        SELECT EXISTS (
+            SELECT FROM information_schema.tables
+            WHERE  table_schema = '{TEST_DATASET_NAME}'
+            AND    table_name   = '{version}'
+        );
+        """
+        result = pg.execute(sql).fetchall()
+        assert result[0][0], f"{TEST_DATASET_NAME}.{version} is not in postgres database yet"
 
-    # Clean up
-    if result[0][0]:
-        pg.execute(f"DROP TABLE IF EXISTS {TEST_DATASET_NAME};")
-    result = pg.execute(sql).fetchall()
-    assert not result[0][0], "clean up failed"
+    pg.execute(f'DROP SCHEMA IF EXISTS {TEST_DATASET_NAME} CASCADE;')
 
 
 def test_ingest_csv():
