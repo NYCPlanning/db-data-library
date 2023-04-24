@@ -36,7 +36,7 @@ jobs:
       - name: Archive ${{ github.event.inputs.dataset }}
         env:
           latest: ${{ github.event.inputs.latest == 'true' && '--latest' || ' ' }}
-          version: ${{ github.event.inputs.version || ' ' }}
+          version: ${{ github.event.inputs.version && format('--version {0}', github.event.inputs.version) || ' ' }}
         run: |
           poetry run library archive --name ${{ github.event.inputs.dataset }} -o pgdump --s3 --compress $latest $version
           poetry run library archive --name ${{ github.event.inputs.dataset }} -o shapefile --s3 --compress $latest $version
