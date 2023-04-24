@@ -2,18 +2,19 @@ import os
 
 from library.ingest import Ingestor
 
-from . import pg, recipe_engine, test_root_path
+from . import (
+    pg,
+    recipe_engine,
+    TEST_DATASET_NAME,
+    TEST_DATASET_VERSION,
+    TEST_DATASET_CONFIG_FILE,
+    TEST_DATASET_OUTPUT_PATH,
+)
 
-TEST_DATASET_NAME = "test_nypl_libraries"
-TEST_DATASET_VERSION = "20210122"
-TEST_DATASET_CONFIG_FILE = f"{test_root_path}/data/{TEST_DATASET_NAME}.yml"
-TEST_DATASET_OUTPUT_PATH = f".library/datasets/{TEST_DATASET_NAME}/{TEST_DATASET_VERSION}/{TEST_DATASET_NAME}"
 
 def test_ingest_postgres():
     ingestor = Ingestor()
-    ingestor.postgres(
-        TEST_DATASET_CONFIG_FILE, postgres_url=recipe_engine
-    )
+    ingestor.postgres(TEST_DATASET_CONFIG_FILE, postgres_url=recipe_engine)
     for version in [TEST_DATASET_VERSION, "latest"]:
         sql = f"""
         SELECT EXISTS (
@@ -23,45 +24,41 @@ def test_ingest_postgres():
         );
         """
         result = pg.execute(sql).fetchall()
-        assert result[0][0], f"{TEST_DATASET_NAME}.{version} is not in postgres database yet"
+        assert result[0][
+            0
+        ], f"{TEST_DATASET_NAME}.{version} is not in postgres database yet"
 
-    pg.execute(f'DROP SCHEMA IF EXISTS {TEST_DATASET_NAME} CASCADE;')
+    pg.execute(f"DROP SCHEMA IF EXISTS {TEST_DATASET_NAME} CASCADE;")
 
 
 def test_ingest_csv():
     ingestor = Ingestor()
     ingestor.csv(TEST_DATASET_CONFIG_FILE, compress=True)
-    assert os.path.isfile(
-        f"{TEST_DATASET_OUTPUT_PATH}.csv"
-    )
+    assert os.path.isfile(f"{TEST_DATASET_OUTPUT_PATH}.csv")
 
 
 def test_ingest_pgdump():
     ingestor = Ingestor()
     ingestor.pgdump(TEST_DATASET_CONFIG_FILE, compress=True)
-    assert os.path.isfile(
-        f"{TEST_DATASET_OUTPUT_PATH}.sql"
-    )
+    assert os.path.isfile(f"{TEST_DATASET_OUTPUT_PATH}.sql")
 
 
 def test_ingest_geojson():
     ingestor = Ingestor()
     ingestor.geojson(TEST_DATASET_CONFIG_FILE, compress=True)
-    assert os.path.isfile(
-        f"{TEST_DATASET_OUTPUT_PATH}.geojson"
-    )
+    assert os.path.isfile(f"{TEST_DATASET_OUTPUT_PATH}.geojson")
 
 
 def test_ingest_shapefile():
     ingestor = Ingestor()
     ingestor.shapefile(TEST_DATASET_CONFIG_FILE)
-    assert os.path.isfile(
-        f"{TEST_DATASET_OUTPUT_PATH}.shp.zip"
-    )
+    assert os.path.isfile(f"{TEST_DATASET_OUTPUT_PATH}.shp.zip")
 
 
 def test_ingest_version_overwrite():
     version_overwrite = "test_version"
     ingestor = Ingestor()
     ingestor.csv(TEST_DATASET_CONFIG_FILE, version=version_overwrite)
-    assert os.path.isfile(f".library/datasets/{TEST_DATASET_NAME}/{version_overwrite}/{TEST_DATASET_NAME}.csv")
+    assert os.path.isfile(
+        f".library/datasets/{TEST_DATASET_NAME}/{version_overwrite}/{TEST_DATASET_NAME}.csv"
+    )
