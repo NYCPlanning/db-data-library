@@ -102,7 +102,7 @@ class Ingestor:
                 BarColumn(bar_width=30),
                 TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
                 TimeRemainingColumn(),
-                transient=False,
+                transient=True,
             ) as progress:
                 task = progress.add_task(
                     f"[green]Ingesting [bold]{dataset_name}[/bold]", total=1000
