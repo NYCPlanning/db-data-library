@@ -1,6 +1,7 @@
 from multiprocessing import connection
 import pandas as pd
 
+from .scriptor import ScriptorInterface
 from . import df_to_tempfile
 from dotenv import load_dotenv
 import boto3
@@ -11,13 +12,9 @@ from io import StringIO
 # Load environmental variables
 load_dotenv()
 
-class Scriptor:
+class Scriptor(ScriptorInterface):
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
-
-    @property
-    def version(self):
-        return self.config["dataset"]["version"]
 
     def ingest(self) -> pd.DataFrame:
         client = boto3.client(

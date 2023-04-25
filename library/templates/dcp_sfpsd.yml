@@ -4,6 +4,7 @@ dataset:
   acl: public-read
   source:
     script: *name
+    path: https://www1.nyc.gov/assets/planning/download/zip/data-maps/open-data/facilities_csv_201901.zip
     options:
       - "AUTODETECT_TYPE=NO"
       - "EMPTY_STRING_AS_NULL=YES"

@@ -2,22 +2,19 @@
 import pandas as pd
 
 from . import df_to_tempfile
+from .scriptor import ScriptorInterface
 
 
-class Scriptor:
+class Scriptor(ScriptorInterface):
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
-
-    @property
-    def version(self):
-        return self.config["dataset"]["version"]
 
     @property
     def previous_version(self) -> str:
         return self.config["dataset"]["info"]["previous_version"]
 
     def ingest(self) -> pd.DataFrame:
-        df = pd.read_csv("library/tmp/dob_cofos.csv", dtype=str)
+        df = pd.read_csv(self.path, dtype=str)
         df.insert(0, "v", self.version)
         # add the extra column and assign the missing columns to None
         df.insert(df.shape[1], "docstatus", None)
@@ -36,7 +33,7 @@ class Scriptor:
         return df
 
     def previous(self) -> pd.DataFrame:
-        url = f"https://nyc3.digitaloceanspaces.com/edm-recipes/datasets/dob_cofos/{self.previous_version}/dob_cofos.csv"
+        url = f"s3://edm-recipes/datasets/dob_cofos/{self.previous_version}/dob_cofos.csv"
         return pd.read_csv(url, dtype=str)
 
     def runner(self) -> str:

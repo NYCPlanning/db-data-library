@@ -4,7 +4,7 @@ dataset:
   acl: public-read
   source:
     url:
-      path: https://nyc3.digitaloceanspaces.com/edm-publishing/datasets/dcp_limited_height_districts/staging/dcp_limited_height_districts.zip
+      path: s3://edm-publishing/datasets/dcp_limited_height_districts/staging/dcp_limited_height_districts.zip
       subpath: ""
     options:
       - "AUTODETECT_TYPE=NO"

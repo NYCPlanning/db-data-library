@@ -1,5 +1,6 @@
 import pandas as pd
 
+from .scriptor import ScriptorInterface
 from . import df_to_tempfile
 from dotenv import load_dotenv
 
@@ -7,20 +8,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-class Scriptor:
+class Scriptor(ScriptorInterface):
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
-    @property
-    def version(self):
-        return self.config["dataset"]["version"]
-
-    @property
-    def filepath(self):
-        return self.config["dataset"]["source"]["filepath"]
-
     def ingest(self) -> pd.DataFrame:
-        df = pd.read_csv(self.filepath, encoding="ISO-8859-1")
+        df = pd.read_csv(self.path, encoding="ISO-8859-1")
         return df
 
     def runner(self) -> str:

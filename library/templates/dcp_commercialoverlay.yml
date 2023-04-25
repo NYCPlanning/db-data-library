@@ -4,7 +4,7 @@ dataset:
   acl: public-read
   source:
     url:
-      path: https://nyc3.digitaloceanspaces.com/edm-publishing/datasets/dcp_commercial_overlays/staging/dcp_commercial_overlays.zip
+      path: s3://edm-publishing/datasets/dcp_commercial_overlays/staging/dcp_commercial_overlays.zip
       subpath: ""
     options:
       - "AUTODETECT_TYPE=NO"

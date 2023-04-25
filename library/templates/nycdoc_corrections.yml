@@ -4,6 +4,7 @@ dataset:
   acl: public-read
   source:
     script: *name
+    path: https://www1.nyc.gov/site/doc/about/facilities-locations.page
     options:
       - "AUTODETECT_TYPE=NO"
       - "EMPTY_STRING_AS_NULL=YES"
