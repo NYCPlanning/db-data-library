@@ -18,13 +18,11 @@ def test_dpr_capitalprojects():
         ".library/datasets/dpr_capitalprojects/test/dpr_capitalprojects.csv"
     )
 
-# NOTE disable due to unexpected test failure:
-# RuntimeError: Terminating translation prematurely after failed
-# translation of layer tmpo73nzl58 (use -skipfailures to skip errors)
-# def test_nypl_libraries():
-#     ingestor = Ingestor()
-#     ingestor.csv(f"{template_path}/nypl_libraries.yml", version="test")
-#     assert os.path.isfile(".library/datasets/nypl_libraries/test/nypl_libraries.csv")
+
+def test_nypl_libraries():
+    ingestor = Ingestor()
+    ingestor.csv(f"{template_path}/nypl_libraries.yml", version="test")
+    assert os.path.isfile(".library/datasets/nypl_libraries/test/nypl_libraries.csv")
 
 
 def test_uscourts_courts():
