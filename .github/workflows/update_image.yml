@@ -23,21 +23,12 @@ jobs:
         with:
           username: ${{ secrets.AW_Docker_Username }}
           password: ${{ secrets.AW_Docker_Password }}
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: nycplanning/library
-      - name: print intermediate outputs
-        run: |
-          echo "${{ steps.meta.outputs.tags }}"
-          echo "${{ steps.meta.outputs.labels }}"
       - name: Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: nycplanning/library:${{ github.event.inputs.image_tag || 'ubuntu-latest' }}
           labels: ${{ steps.meta.outputs.labels }}
 
   update_docs:
