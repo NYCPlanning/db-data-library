@@ -1,3 +1,5 @@
+## Not typically used, but was once needed when input data was malformed (usecode as int rather than varchar, so missing leading zeroes)
+
 import pandas as pd
 from zipfile import ZipFile
 import requests
