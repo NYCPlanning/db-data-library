@@ -29,7 +29,6 @@ jobs:
           context: .
           push: true
           tags: nycplanning/library:${{ github.event.inputs.image_tag || 'ubuntu-latest' }}
-          labels: ${{ steps.meta.outputs.labels }}
 
   update_docs:
     needs: update_image
