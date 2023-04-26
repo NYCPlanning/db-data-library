@@ -1,6 +1,7 @@
 import os
 import sys
 import zipfile
+import datetime
 from functools import wraps
 from math import floor
 
@@ -43,6 +44,11 @@ class Ingestor:
     def translator(func):
         @wraps(func)
         def wrapper(self, *args, **kwargs) -> list:
+            # get relevant translator return values
+            (dstDS, output_format, output_suffix, compress, inplace) = func(
+                self, *args, **kwargs
+            )
+
             output_files = []
             path = args[0]
             c = Config(path, kwargs.get("version", None))
@@ -50,9 +56,6 @@ class Ingestor:
             name = dataset["name"]
             version = dataset["version"]
             acl = dataset["acl"]
-            (dstDS, output_format, output_suffix, compress, inplace) = func(
-                self, *args, **kwargs
-            )
             # initiate source and destination datasets
             folder_path = f"{self.base_path}/datasets/{name}/{version}"
 
@@ -71,6 +74,7 @@ class Ingestor:
             )
 
             layerName = srcDS.GetLayer(0).GetName()
+            dataset_name = destination["name"]
             sql = destination.get("sql", None)
             sql = None if not sql else sql.replace("@filename", layerName)
 
@@ -82,6 +86,15 @@ class Ingestor:
                 output_files.append(f"{folder_path}/config.json")
                 output_files.append(f"{folder_path}/config.yml")
 
+            # Create postgres database schema and table version if needed
+            if output_format == "PostgreSQL":
+                schema_name = dataset_name
+                dstDS.ExecuteSQL(f'CREATE SCHEMA IF NOT EXISTS {schema_name};')
+                version = datetime.today().strftime("%Y/%m/%d") if version == '' else version
+                layerName = f'{schema_name}.{version}'
+            else:
+                layerName = dataset_name
+                                
             # Initiate vector translate
             with Progress(
                 SpinnerColumn(spinner_name="earth"),
@@ -92,12 +105,13 @@ class Ingestor:
                 transient=True,
             ) as progress:
                 task = progress.add_task(
-                    f"[green]Ingesting [bold]{destination['name']}[/bold]", total=1000
+                    f"[green]Ingesting [bold]{dataset_name}[/bold]", total=1000
                 )
 
                 def update_progress(complete, message, unknown):
                     progress.update(task, completed=floor(complete * 1000))
 
+                gdal.UseExceptions()
                 gdal.VectorTranslate(
                     dstDS,
                     srcDS,
@@ -106,14 +120,25 @@ class Ingestor:
                     dstSRS=destination["geometry"]["SRS"],
                     srcSRS=source["geometry"]["SRS"],
                     geometryType=destination["geometry"]["type"],
-                    layerName=destination["name"],
+                    layerName=layerName,
                     accessMode="overwrite",
                     makeValid=True,
                     # optional settings
                     SQLStatement=sql,
-                    SQLDialect="sqlite",
+                    SQLDialect="PostgreSQL",
                     callback=update_progress,
                 )
+
+
+            # Create latest view in postgres database if needed
+            if output_format == "PostgreSQL":
+                dstDS.ExecuteSQL(f"DROP VIEW IF EXISTS {schema_name}.latest;")
+                dstDS.ExecuteSQL(f"DROP TABLE IF EXISTS {schema_name}.latest;")
+                dstDS.ExecuteSQL(f"""
+                    CREATE VIEW {schema_name}.latest
+                    as (SELECT \'{version}\' as v, *
+                    from {schema_name}."{version}");
+                    """)
 
             # Compression if needed
             if compress and destination_path:
