@@ -9,6 +9,7 @@ Archive datasets to S3 via CLI
 
 `library archive --name dcp_commercialoverlay --s3 --clean`
 
+`library archive --name sca_e_pct --version 20230425 --output-format postgres --postgres-url $RECIPE_ENGINE`
 
 ## Usage
 
