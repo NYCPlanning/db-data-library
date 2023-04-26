@@ -16,31 +16,19 @@ on:
 jobs:
   update_image:
     runs-on: ubuntu-22.04
-    env:
-      AW_DOCKER_USERNAME: ${{ secrets.AW_Docker_Username }}
-      AW_DOCKER_PASSWORD: ${{ secrets.AW_Docker_Password }}
-      image_tag: nycplanning/library:${{ github.event.inputs.image_tag || 'ubuntu-latest' }}
-
     steps:
       - uses: actions/checkout@v3
-
       - name: Log in to Docker Hub
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
-          username: $AW_DOCKER_USERNAME
-          password: $AW_DOCKER_PASSWORD
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: $image_tag
+          username: ${{ secrets.AW_Docker_Username }}
+          password: ${{ secrets.AW_Docker_Password }}
       - name: Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: nycplanning/library:${{ github.event.inputs.image_tag || 'ubuntu-latest' }}
 
   update_docs:
     needs: update_image
