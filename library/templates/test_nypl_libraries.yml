@@ -4,7 +4,7 @@ dataset:
   acl: public-read
   source:
     url:
-      path: path: tests/data/test_nypl_libraries.csv
+      path: tests/data/test_nypl_libraries.csv
       subpath: ""
     options:
       - "AUTODETECT_TYPE=NO"
