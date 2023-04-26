@@ -27,7 +27,8 @@ dataset:
 
   info:
     description: |
-      ### TODO
-      TODO
+      ### Proximity-restricted establishments
+      A subset of PLUTO tax lots where establishments could appear in the future.
+      Provided by DCP GIS team as a zipped shapfile.
     url: ""
     dependents: []

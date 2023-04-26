@@ -26,7 +26,7 @@ dataset:
 
   info:
     description: |
-      ### TODO
-      TODO
+      ### NYC School Construction Authority - Capacity Projects in Progress
+      Provided by DCP Capital Planning team as an excel file.
     url: ""
     dependents: []
