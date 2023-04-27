@@ -54,7 +54,7 @@ class Ingestor:
             c = Config(path, kwargs.get("version", None))
             dataset, source, destination, _ = c.compute_parsed
             name = dataset["name"]
-            version = dataset["version"]
+            version = dataset["version"].lower()
             acl = dataset["acl"]
             # initiate source and destination datasets
             folder_path = f"{self.base_path}/datasets/{name}/{version}"
