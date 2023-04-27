@@ -54,7 +54,7 @@ class Ingestor:
             c = Config(path, kwargs.get("version", None))
             dataset, source, destination, _ = c.compute_parsed
             name = dataset["name"]
-            version = dataset["version"].lower()
+            version = dataset["version"]
             acl = dataset["acl"]
             # initiate source and destination datasets
             folder_path = f"{self.base_path}/datasets/{name}/{version}"
@@ -90,7 +90,7 @@ class Ingestor:
             if output_format == "PostgreSQL":
                 schema_name = dataset_name
                 dstDS.ExecuteSQL(f'CREATE SCHEMA IF NOT EXISTS {schema_name};')
-                version = datetime.today().strftime("%Y/%m/%d") if version == '' else version
+                version = datetime.today().strftime("%Y/%m/%d") if version == '' else version.lower()
                 layerName = f'{schema_name}.{version}'
             else:
                 layerName = dataset_name
