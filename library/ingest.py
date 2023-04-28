@@ -90,7 +90,7 @@ class Ingestor:
             if output_format == "PostgreSQL":
                 schema_name = dataset_name
                 dstDS.ExecuteSQL(f'CREATE SCHEMA IF NOT EXISTS {schema_name};')
-                version = datetime.today().strftime("%Y/%m/%d") if version == '' else version
+                version = datetime.today().strftime("%Y/%m/%d") if version == '' else version.lower()
                 layerName = f'{schema_name}.{version}'
             else:
                 layerName = dataset_name
