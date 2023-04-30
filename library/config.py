@@ -8,7 +8,7 @@ from jinja2 import Template
 
 from .utils import format_url, get_execution_details
 from .validator import Validator
-
+from functools import cached_property
 
 # Custom dumper created for list indentation
 class Dumper(yaml.Dumper):
@@ -76,7 +76,7 @@ class Config:
         """
         return datetime.today().strftime("%Y%m%d")
 
-    @property
+    @cached_property
     def compute(self) -> dict:
         """based on given yml file, compute the configuration"""
 
