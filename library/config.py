@@ -103,8 +103,6 @@ class Config:
                 "options": options,
                 "geometry": geometry,
             }
-            
-            config["execution_details"] = get_execution_details()
 
         if self.source_type == "url":
             # Load unrendered template to check for yml-specified
@@ -158,6 +156,7 @@ class Config:
         path = config["dataset"]["source"]["url"]["path"]
         subpath = config["dataset"]["source"]["url"]["subpath"]
         config["dataset"]["source"]["url"]["gdalpath"] = format_url(path, subpath)
+        config["execution_details"] = get_execution_details()
         return config
 
     @property
