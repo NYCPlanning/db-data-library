@@ -66,4 +66,4 @@ def test_ingest_version_overwrite():
 
 def test_ingest_with_sql():
     ingestor = Ingestor()
-    ingestor.csv(get_config_file("url"))
+    ingestor.csv(get_config_file("bpl_libraries_sql"))
