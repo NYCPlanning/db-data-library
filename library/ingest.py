@@ -77,8 +77,6 @@ class Ingestor:
             dataset_name = destination["name"]
             sql = destination.get("sql", None)
             sql = None if not sql else sql.replace("@filename", layerName)
-            print(sql)
-            print("test")
             
             # Create output folder and output config
             if folder_path and output_suffix:
