@@ -77,7 +77,9 @@ class Ingestor:
             dataset_name = destination["name"]
             sql = destination.get("sql", None)
             sql = None if not sql else sql.replace("@filename", layerName)
-
+            print(sql)
+            print("test")
+            
             # Create output folder and output config
             if folder_path and output_suffix:
                 os.makedirs(folder_path, exist_ok=True)
@@ -125,7 +127,7 @@ class Ingestor:
                     makeValid=True,
                     # optional settings
                     SQLStatement=sql,
-                    SQLDialect="PostgreSQL",
+                    SQLDialect="SQLite",
                     callback=update_progress,
                 )
 
