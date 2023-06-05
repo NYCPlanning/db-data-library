@@ -5,6 +5,7 @@ from library.ingest import Ingestor
 from . import (
     pg,
     recipe_engine,
+    get_config_file,
     TEST_DATASET_NAME,
     TEST_DATASET_VERSION,
     TEST_DATASET_CONFIG_FILE,
@@ -62,3 +63,7 @@ def test_ingest_version_overwrite():
     assert os.path.isfile(
         f".library/datasets/{TEST_DATASET_NAME}/{version_overwrite}/{TEST_DATASET_NAME}.csv"
     )
+
+def test_ingest_with_sql():
+    ingestor = Ingestor()
+    ingestor.csv(get_config_file("url"))

@@ -1,25 +1,24 @@
 from pathlib import Path
-
 from library.config import Config
 
-from . import template_path
+from . import template_path, get_config_file
 
 
 def test_config_parsed_rendered_template():
-    c = Config(f"{Path(__file__).parent}/data/url.yml")
+    c = Config(get_config_file("url"))
     rendered = c.parsed_rendered_template(version="20v7")
     assert rendered["dataset"]["version"] == "20v7"
 
 
 def test_config_source_type():
-    c = Config(f"{Path(__file__).parent}/data/socrata.yml")
+    c = Config(get_config_file("socrata"))
     assert c.source_type == "socrata"
-    c = Config(f"{Path(__file__).parent}/data/url.yml")
+    c = Config(get_config_file("url"))
     assert c.source_type == "url"
 
 
 def test_config_version_socrata():
-    c = Config(f"{Path(__file__).parent}/data/socrata.yml")
+    c = Config(get_config_file("socrata"))
     uid = c.parsed_unrendered_template["dataset"]["source"]["socrata"]["uid"]
     version = c.version_socrata(uid)
     assert len(version) == 8  # format: YYYYMMDD
@@ -28,7 +27,7 @@ def test_config_version_socrata():
 
 
 def test_config_version_today():
-    c = Config(f"{Path(__file__).parent}/data/socrata.yml")
+    c = Config(get_config_file("socrata"))
     version = c.version_today
     assert len(version) == 8  # format: YYYYMMDD
     assert int(version[-2:]) <= 31  # check date
@@ -36,13 +35,13 @@ def test_config_version_today():
 
 
 def test_config_compute():
-    config = Config(f"{Path(__file__).parent}/data/socrata.yml").compute
+    config = Config(get_config_file("socrata")).compute
     assert type(config["dataset"]["source"]["url"]) == dict
 
 
 def test_config_compute_parsed():
     dataset, source, destination, info = Config(
-        f"{Path(__file__).parent}/data/socrata.yml"
+        get_config_file("socrata")
     ).compute_parsed
     assert dataset["source"] == source
     assert dataset["info"] == info
