@@ -1,4 +1,3 @@
-from multiprocessing import connection
 import pandas as pd
 
 from .scriptor import ScriptorInterface

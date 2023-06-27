@@ -19,8 +19,7 @@ class Scriptor(ScriptorInterface):
         self.__dict__.update(kwargs)
         
     def ingest(self) -> pd.DataFrame:
-        url = f"https://s-media.nyc.gov/agencies/dcp/assets/files/zip/data-tools/bytes/nyc_colp_csv_{self.version}.zip"
-        r = requests.get(url, stream=True)
+        r = requests.get(self.path, stream=True)
         with open(f"nyc_colp_csv_{self.version}.zip", "wb") as fd:
             for chunk in r.iter_content(chunk_size=128):
                 fd.write(chunk)

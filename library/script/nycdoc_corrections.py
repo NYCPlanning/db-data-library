@@ -1,11 +1,8 @@
-import json
-import os
 import re
 import ssl
 from urllib.request import Request, urlopen
 
 import pandas as pd
-import requests
 import usaddress
 from bs4 import BeautifulSoup
 

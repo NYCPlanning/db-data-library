@@ -1,4 +1,3 @@
-from multiprocessing import connection
 import pandas as pd
 
 from .scriptor import ScriptorInterface
@@ -7,8 +6,6 @@ from dotenv import load_dotenv
 import boto3
 import os
 import io
-
-from io import StringIO
 
 # Load environmental variables
 load_dotenv()

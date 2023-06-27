@@ -9,8 +9,7 @@ class Scriptor(ScriptorInterface):
         self.__dict__.update(kwargs)
 
     def ingest(self) -> pd.DataFrame:
-        url = "https://www.bklynlibrary.org/locations/json"
-        content = get_json_content(url)
+        content = get_json_content(self.path)
         data = []
         for i in content["locations"]:
             data.append(i["data"])

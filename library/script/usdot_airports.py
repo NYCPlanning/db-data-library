@@ -1,5 +1,4 @@
 import pandas as pd
-import requests
 
 from . import df_to_tempfile
 from .scriptor import ScriptorInterface
