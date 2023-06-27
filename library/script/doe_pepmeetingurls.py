@@ -1,6 +1,3 @@
-import json
-import os
-import re
 import urllib
 from itertools import groupby
 from pathlib import Path
