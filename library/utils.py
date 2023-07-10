@@ -70,7 +70,7 @@ def get_execution_details():
             "timestamp": timestamp,
             }
     else:
-        git_user = try_func(subprocess.run(["git", "config", "user.name"], stdout=subprocess.PIPE).stdout.strip().decode)
+        git_user = try_func(lambda: subprocess.run(["git", "config", "user.name"], stdout=subprocess.PIPE).stdout.strip().decode())
         return {
             "type": "manual",
             "user": git_user,
