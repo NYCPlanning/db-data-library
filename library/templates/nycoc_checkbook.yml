@@ -1,11 +1,12 @@
 dataset:
   name: &name nycoc_checkbook
   version: "{{ version }}"
-  acl: private 
+
+  acl: public-read 
   
   source:
     url:
-      path: /Users/alexandrathursland/Documents/NYC-DCP/historical-spend-data/checkbook_citywide_agencies.csv
+      path: .library/datasources/checkbook_citywide_agencies.csv
       subpath: ""
 
     geometry:
@@ -32,9 +33,11 @@ dataset:
 
   info:
     description: |
-      The NYCOC Checkbook dataset was created by EDM DE Fellows in response to a request from Capital Planning 
-      to explore the feasibility of creating a data product focused on collecting geospatial data to historical 
-      liquidations data to better inform future spending decisions at the community level. 
+
+      The NYC Office of the Comptroller Checkbook dataset was created by EDM DE Fellows in response 
+      to a request from Capital Planning to explore the feasibility of creating a data product 
+      focused on connecting geospatial data to historical liquidations data to better inform 
+      future spending decisions at the community level. 
 
       The spending data comes from Checkbook NYC and captures all Capital Project 
       spending 2010 - present (data collected May 31, 2023). The geospatial data comes
