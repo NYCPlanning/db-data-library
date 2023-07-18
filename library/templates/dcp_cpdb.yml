@@ -1,0 +1,38 @@
+dataset:
+  name: &name dcp_cpdb
+  version: "{{ version }}"
+  acl: private 
+  
+  source:
+    url:
+      path: library/tmp/cpdb_projects.csv
+      subpath: ""
+
+    geometry:
+      SRS: null
+      type: NONE
+
+    options:
+      - "AUTODETECT_TYPE=NO"
+      - "EMPTY_STRING_AS_NULL=YES"
+
+
+  destination: 
+    name: *name
+
+    geometry:
+      SRS: null
+      type: NONE
+
+    options: 
+      - "OVERWRITE=YES"
+      - "PRECISION=NO"
+
+    fields: []
+    sql: null 
+
+  info:
+    description: |
+      Checkbook NYC Spending API: https://www.checkbooknyc.com/spending-api
+      CPDB in DE monorepo: https://github.com/NYCPlanning/data-engineering/tree/main/db-cpdb
+    dependents: []
