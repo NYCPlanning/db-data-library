@@ -5,7 +5,7 @@ dataset:
   
   source:
     url:
-      path: library/tmp/cpdb_projects.csv
+      path: library/tmp/cpdb/cpdb_dcpattributes_poly_18.zip
       subpath: ""
 
     geometry:
