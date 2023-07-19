@@ -1,4 +1,5 @@
 name: 📁 Update a Single Dataset
+run-name: "📁 Update a Single Dataset: ${{ inputs.dataset }}"
 
 on:
   workflow_dispatch:
