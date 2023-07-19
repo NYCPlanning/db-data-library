@@ -5,12 +5,12 @@ dataset:
   
   source:
     url:
-      path: library/tmp/cpdb/cpdb_dcpattributes_poly_18.zip
+      path: library/tmp/cpdb/cpdb_dcpattributes_pts_23/cpdb_dcpattributes_pts.shp
       subpath: ""
 
     geometry:
-      SRS: null
-      type: NONE
+      SRS: EPSG:4326
+      type: POINT
 
     options:
       - "AUTODETECT_TYPE=NO"
@@ -21,8 +21,8 @@ dataset:
     name: *name
 
     geometry:
-      SRS: null
-      type: NONE
+      SRS: EPSG:4326
+      type: POINT
 
     options: 
       - "OVERWRITE=YES"
@@ -33,6 +33,6 @@ dataset:
 
   info:
     description: |
-      Checkbook NYC Spending API: https://www.checkbooknyc.com/spending-api
       CPDB in DE monorepo: https://github.com/NYCPlanning/data-engineering/tree/main/db-cpdb
+      This file loads historical CPDB data shapefiles, currently split into points and multipolygons, into Digital Ocean. 
     dependents: []
