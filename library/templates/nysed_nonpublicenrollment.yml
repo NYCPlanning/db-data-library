@@ -4,7 +4,7 @@ dataset:
   acl: public-read
   source:
     script: *name
-    path: http://www.p12.nysed.gov/irs/statistics/nonpublic/{{ version }}_NonPub_Enrollment_Grade.xlsx
+    path: https://www.p12.nysed.gov/irs/statistics/nonpublic/enrollment-by-grade-nonpublic-{{ version }}.xlsx
     options:
       - "AUTODETECT_TYPE=NO"
       - "EMPTY_STRING_AS_NULL=YES"
