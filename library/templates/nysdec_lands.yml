@@ -4,7 +4,7 @@ dataset:
   acl: public-read
   source:
     url:
-      path: http://gis.ny.gov/gisdata/data/ds_1114/DEC_lands.zip
+      path: library/tmp/NYS_DEC_Lands.zip
       subpath: ""
     options:
       - "AUTODETECT_TYPE=NO"
@@ -29,5 +29,6 @@ dataset:
     description: |
       ## DEC Lands and Campgrounds
       Lands under the care, custody and control of DEC, including Wildlife Management areas, Unique Areas, State Forests, Forest Preserve, and DEC-operated campgrounds.
+      Download Shapefile here: https://data.gis.ny.gov/datasets/84b4cce8a8974c31a1c5584540f3aaae_0/about
     url: http://gis.ny.gov/gisdata/inventories/details.cfm?DSID=1114
     dependents: []
