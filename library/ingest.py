@@ -77,7 +77,7 @@ class Ingestor:
             dataset_name = destination["name"]
             sql = destination.get("sql", None)
             sql = None if not sql else sql.replace("@filename", layerName)
-            
+
             # Create output folder and output config
             if folder_path and output_suffix:
                 os.makedirs(folder_path, exist_ok=True)
@@ -89,12 +89,16 @@ class Ingestor:
             # Create postgres database schema and table version if needed
             if output_format == "PostgreSQL":
                 schema_name = dataset_name
-                dstDS.ExecuteSQL(f'CREATE SCHEMA IF NOT EXISTS {schema_name};')
-                version = datetime.today().strftime("%Y/%m/%d") if version == '' else version.lower()
-                layerName = f'{schema_name}.{version}'
+                dstDS.ExecuteSQL(f"CREATE SCHEMA IF NOT EXISTS {schema_name};")
+                version = (
+                    datetime.today().strftime("%Y/%m/%d")
+                    if version == ""
+                    else version.lower()
+                )
+                layerName = f"{schema_name}.{version}"
             else:
                 layerName = dataset_name
-                                
+
             # Initiate vector translate
             with Progress(
                 SpinnerColumn(spinner_name="earth"),
@@ -129,16 +133,17 @@ class Ingestor:
                     callback=update_progress,
                 )
 
-
             # Create latest view in postgres database if needed
             if output_format == "PostgreSQL":
                 dstDS.ExecuteSQL(f"DROP VIEW IF EXISTS {schema_name}.latest;")
                 dstDS.ExecuteSQL(f"DROP TABLE IF EXISTS {schema_name}.latest;")
-                dstDS.ExecuteSQL(f"""
+                dstDS.ExecuteSQL(
+                    f"""
                     CREATE VIEW {schema_name}.latest
                     as (SELECT \'{version}\' as v, *
                     from {schema_name}."{version}");
-                    """)
+                    """
+                )
 
             # Compression if needed
             if compress and destination_path:
