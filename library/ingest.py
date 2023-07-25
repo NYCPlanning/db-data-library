@@ -134,7 +134,6 @@ class Ingestor:
                     Path(dstDS).unlink()
 
 
-                gdal.UseExceptions()
                 gdal.VectorTranslate(
                     dstDS,
                     srcDS,
