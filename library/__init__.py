@@ -17,6 +17,7 @@ pp = pprint.PrettyPrinter(indent=4)
 # gdal pg config, turn off warning
 gdal.SetConfigOption("PG_USE_COPY", "YES")
 gdal.SetConfigOption("CPL_LOG", "/dev/null")
+gdal.UseExceptions()
 
 # gdal configure aws s3 connection info
 aws_access_key_id = os.environ["AWS_ACCESS_KEY_ID"]
