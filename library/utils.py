@@ -32,15 +32,16 @@ def format_url(path: str, subpath: str) -> str:
     Adds "vsicurl" if [url] contains http
     - https://rawgithubcontent.come/somerepo/somefile.csv
     """
-    if os.path.isfile(path):
-        if ".zip" in path:
-            return "/vsizip/" + path
-        return path
 
     if len(subpath) > 0:
         subpath = subpath[1:] if subpath[0] == "/" else subpath
     path = path[:-1] if path[-1] == "/" else path
     url = path if len(subpath) == 0 else path + "/" + subpath
+
+    if os.path.isfile(path):
+        if ".zip" in url:
+            return "/vsizip/" + url
+        return url
 
     if ".zip" in url:
         if "http" in url:
