@@ -6,6 +6,7 @@ from functools import wraps
 from math import floor
 
 from osgeo import gdal
+from pathlib import Path
 from rich.progress import (
     BarColumn,
     Progress,
@@ -114,6 +115,17 @@ class Ingestor:
 
                 def update_progress(complete, message, unknown):
                     progress.update(task, completed=floor(complete * 1000))
+
+                # This addresses a gdal issue where translation will fail
+                # to generate a csv from a shapefile if a csv already exists at
+                # the target path
+                if (
+                    type(dstDS) == str
+                    and dstDS.endswith(".csv")
+                    and Path(dstDS).exists()
+                ):
+                    Path(dstDS).unlink()
+
 
                 gdal.UseExceptions()
                 gdal.VectorTranslate(
