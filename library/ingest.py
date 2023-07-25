@@ -1,5 +1,6 @@
 import os
-import sys
+import pathlib
+import shutil
 import zipfile
 import datetime
 from functools import wraps
@@ -12,7 +13,6 @@ from rich.progress import (
     Progress,
     SpinnerColumn,
     TextColumn,
-    TimeElapsedColumn,
     TimeRemainingColumn,
 )
 
@@ -60,11 +60,26 @@ class Ingestor:
             # initiate source and destination datasets
             folder_path = f"{self.base_path}/datasets/{name}/{version}"
 
+            if not output_suffix and not output_format:
+                output_suffix = pathlib.Path(source["url"]["gdalpath"]).suffix.strip(".")
+
             if output_suffix:
                 destination_path = f"{folder_path}/{name}.{output_suffix}"
                 output_files.append(destination_path)
             else:
                 destination_path = None
+            
+            # Create output folder and output config
+            if folder_path and output_suffix:
+                os.makedirs(folder_path, exist_ok=True)
+                self.write_config(f"{folder_path}/config.json", c.compute_json)
+                self.write_config(f"{folder_path}/config.yml", c.compute_yml)
+                output_files.append(f"{folder_path}/config.json")
+                output_files.append(f"{folder_path}/config.yml")
+
+            if not output_format:
+                shutil.copy(source["url"]["gdalpath"], destination_path)
+                return output_files, version, acl
 
             # Default dstDS is destination_path if no dstDS is specificed
             dstDS = destination_path if not dstDS else dstDS
@@ -78,14 +93,6 @@ class Ingestor:
             dataset_name = destination["name"]
             sql = destination.get("sql", None)
             sql = None if not sql else sql.replace("@filename", layerName)
-
-            # Create output folder and output config
-            if folder_path and output_suffix:
-                os.makedirs(folder_path, exist_ok=True)
-                self.write_config(f"{folder_path}/config.json", c.compute_json)
-                self.write_config(f"{folder_path}/config.yml", c.compute_yml)
-                output_files.append(f"{folder_path}/config.json")
-                output_files.append(f"{folder_path}/config.yml")
 
             # Create postgres database schema and table version if needed
             if output_format == "PostgreSQL":
@@ -252,3 +259,9 @@ class Ingestor:
         inplace: True if the compressed file will replace the original output
         """
         return None, "GeoJSON", "geojson", compress, inplace
+
+    @translator
+    def as_is(
+        self, path: str, compress: bool = False, inplace: bool= False, *args, **kwargs
+    ):
+        return None, None, None, compress, inplace
