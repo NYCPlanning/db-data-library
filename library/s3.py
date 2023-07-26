@@ -3,13 +3,13 @@ import os
 from pathlib import Path
 
 import boto3
+from botocore.client import Config 
 from botocore.exceptions import ClientError, ParamValidationError
 from rich.progress import (
     BarColumn,
     Progress,
     SpinnerColumn,
     TextColumn,
-    TimeElapsedColumn,
     TimeRemainingColumn,
 )
 
@@ -24,11 +24,13 @@ class S3:
         aws_s3_endpoint: str,
         aws_s3_bucket: str,
     ):
+        config = Config(read_timeout=120)
         self.client = boto3.client(
             "s3",
             aws_access_key_id=aws_access_key_id,
             aws_secret_access_key=aws_secret_access_key,
             endpoint_url=aws_s3_endpoint,
+            config=config
         )
         self.bucket = aws_s3_bucket
 
