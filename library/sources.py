@@ -1,6 +1,6 @@
 import os
 
-from osgeo import gdal, ogr
+from osgeo import gdal
 
 from .utils import parse_engine
 

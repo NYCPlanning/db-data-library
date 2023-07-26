@@ -1,8 +1,6 @@
-from functools import cached_property
 from typing import List, Literal
 
-import yaml
-from pydantic import BaseModel, ValidationError, validator, Extra
+from pydantic import BaseModel, ValidationError, Extra
 
 VALID_ACL_VALUES = ("public-read", "private")
 VALID_GEOMETRY_TYPES = (
