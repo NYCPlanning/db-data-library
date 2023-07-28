@@ -59,8 +59,8 @@ class S3:
                 f"[green]Uploading [bold]{os.path.basename(path)}[/bold]", total=size
             )
 
-            def update_progress(complete):
-                progress.update(task, completed=complete)
+            def update_progress(bytes):
+                progress.update(task, advance=bytes)
 
             try:
                 response = self.client.upload_file(
