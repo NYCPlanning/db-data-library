@@ -38,23 +38,14 @@ def format_url(path: str, subpath: str) -> str:
     path = path[:-1] if path[-1] == "/" else path
     url = path if len(subpath) == 0 else path + "/" + subpath
 
-    if os.path.isfile(path):
-        if ".zip" in url:
-            return "/vsizip/" + url
-        return url
+    if "s3://" in url:
+        url = url.replace("s3://", "/vsis3/")
 
     if ".zip" in url:
         if "http" in url:
-            url = "/vsizip/vsicurl/" + url
-        elif "s3://" in url:
-            url = "/vsizip/vsis3/" + url.replace("s3://", "")
-        else:
-            url = "/vsizip/" + url
-        return url
-
-    if "s3://" in url and ".zip" not in url:
-        return url.replace("s3://", "/vsis3/")
-
+            url = "/vsicurl/" + url
+        url = "/vsizip/" + url
+    
     return url
 
 def get_execution_details():
