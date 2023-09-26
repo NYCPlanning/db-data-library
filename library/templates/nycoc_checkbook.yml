@@ -1,6 +1,7 @@
 dataset:
   name: &name nycoc_checkbook
   version: "{{ version }}"
+
   acl: public-read 
   
   source:
@@ -32,6 +33,7 @@ dataset:
 
   info:
     description: |
+
       The NYC Office of the Comptroller Checkbook dataset was created by EDM DE Fellows in response 
       to a request from Capital Planning to explore the feasibility of creating a data product 
       focused on connecting geospatial data to historical liquidations data to better inform 

@@ -1,0 +1,38 @@
+dataset:
+  name: &name dcp_cpdb
+  version: "{{ version }}"
+  acl: private 
+  
+  source:
+    url:
+      path: library/tmp/cpdb/cpdb_dcpattributes_pts_23/cpdb_dcpattributes_pts.shp
+      subpath: ""
+
+    geometry:
+      SRS: EPSG:4326
+      type: POINT
+
+    options:
+      - "AUTODETECT_TYPE=NO"
+      - "EMPTY_STRING_AS_NULL=YES"
+
+
+  destination: 
+    name: *name
+
+    geometry:
+      SRS: EPSG:4326
+      type: POINT
+
+    options: 
+      - "OVERWRITE=YES"
+      - "PRECISION=NO"
+
+    fields: []
+    sql: null 
+
+  info:
+    description: |
+      CPDB in DE monorepo: https://github.com/NYCPlanning/data-engineering/tree/main/db-cpdb
+      This file loads historical CPDB data shapefiles, currently split into points and multipolygons, into Digital Ocean. 
+    dependents: []
