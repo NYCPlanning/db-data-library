@@ -11,22 +11,22 @@ def test_format_url():
         dict(
             path="https://website.com/path/file.zip",
             subpath="",
-            expected="/vsizip/vsicurl/https://website.com/path/file.zip",
+            expected="/vsizip//vsicurl/https://website.com/path/file.zip",
         ),
         dict(
             path="https://website.com/path/file.zip",
             subpath="file.shp",
-            expected="/vsizip/vsicurl/https://website.com/path/file.zip/file.shp",
+            expected="/vsizip//vsicurl/https://website.com/path/file.zip/file.shp",
         ),
         dict(
             path="https://website.com/path/file.zip",
             subpath="/file.shp",
-            expected="/vsizip/vsicurl/https://website.com/path/file.zip/file.shp",
+            expected="/vsizip//vsicurl/https://website.com/path/file.zip/file.shp",
         ),
         dict(
             path="https://website.com/path/file.zip/",
             subpath="file.shp",
-            expected="/vsizip/vsicurl/https://website.com/path/file.zip/file.shp",
+            expected="/vsizip//vsicurl/https://website.com/path/file.zip/file.shp",
         ),
         dict(
             path="s3://bucket/path/file.csv",
@@ -36,7 +36,7 @@ def test_format_url():
         dict(
             path="s3://bucket/path/file.zip",
             subpath="",
-            expected="/vsizip/vsis3/bucket/path/file.zip",
+            expected="/vsizip//vsis3/bucket/path/file.zip",
         ),
         dict(
             path="local/directory/file.zip",
