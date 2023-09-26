@@ -12,10 +12,18 @@ on:
         type: boolean
         description: "Tag this version as latest (optional)"
         required: false
-        default: "true"
+        default: true
       version:
         description: "The version of the dataset (i.e. 22v2, 21C) if needed (optional)"
         required: false
+      export:
+        type: boolean
+        description: "Export to S3"
+        default: true
+      compress:
+        type: boolean
+        description: "Compress export"
+        default: false
 
 jobs:
   dataloading:
@@ -36,10 +44,12 @@ jobs:
           poetry install
       - name: Archive ${{ github.event.inputs.dataset }}
         env:
-          latest: ${{ github.event.inputs.latest == 'true' && '--latest' || ' ' }}
-          version: ${{ github.event.inputs.version && format('--version {0}', github.event.inputs.version) || ' ' }}
+          latest: ${{ github.event.inputs.latest == 'true' && '--latest' || '' }}
+          version: ${{ github.event.inputs.version && format('--version {0}', github.event.inputs.version) || '' }}
+          export: ${{ github.event.inputs.export == 'true' && '--s3' || '' }}
+          compress: ${{ github.event.inputs.compress == 'true' && '--compress' || '' }}
         run: |
-          poetry run library archive --name ${{ github.event.inputs.dataset }} -o pgdump --s3 --compress $latest $version
-          poetry run library archive --name ${{ github.event.inputs.dataset }} -o shapefile --s3 --compress $latest $version
-          poetry run library archive --name ${{ github.event.inputs.dataset }} -o csv --s3 --compress $latest $version
+          poetry run library archive --name ${{ github.event.inputs.dataset }} -o pgdump $export $compress $latest $version
+          poetry run library archive --name ${{ github.event.inputs.dataset }} -o shapefile $export $compress $latest $version
+          poetry run library archive --name ${{ github.event.inputs.dataset }} -o csv $export $compress $latest $version
           
