@@ -19,7 +19,7 @@ VALID_GEOMETRY_TYPES = (
     "MULTICURVE",
     "MULTISURFACE",
 )
-VALID_SOCRATA_FORMATS = ("csv", "geojson")
+VALID_SOCRATA_FORMATS = ("csv", "geojson", "shapefile")
 
 # Create schema
 class GeometryType(BaseModel):

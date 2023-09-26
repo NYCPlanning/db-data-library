@@ -3,10 +3,13 @@ dataset:
   version: "{{ version }}"
   acl: public-read
   source:
-    script: *name
+    socrata:
+      uid: qb5r-6dgf # uid of child view of overall dataset which has polygons and not centroids.
+      format: shapefile
     options:
       - "AUTODETECT_TYPE=NO"
-      - "EMPTY_STRING_AS_NULL=YES"
+      - "EMPTY_STRING_AS_NULL=YES"  
+      - "GEOM_POSSIBLE_NAMES=the_geom"  
     geometry:
       SRS: EPSG:4326
       type: MULTIPOLYGON

@@ -1,10 +1,10 @@
 import importlib
 import json
 from datetime import datetime
-
 import requests
 import yaml
 from jinja2 import Template
+import os
 
 from .utils import format_url, get_execution_details
 from .validator import Validator
@@ -144,6 +144,12 @@ class Config:
                 url = f"https://data.cityofnewyork.us/api/views/{_uid}/rows.csv"
             if _format == "geojson":
                 url = f"https://nycopendata.socrata.com/api/geospatial/{_uid}?method=export&format=GeoJSON"
+            if _format == "shapefile":
+                local_path = f"library/tmp/{config['dataset']['name']}.zip"
+                url = f"https://data.cityofnewyork.us/api/geospatial/{_uid}?method=export&format=Shapefile"
+                os.system("mkdir -p library/tmp")
+                os.system(f"curl -o {local_path} \"{url}\"")
+                url = local_path
 
             options = config["dataset"]["source"]["options"]
             geometry = config["dataset"]["source"]["geometry"]
