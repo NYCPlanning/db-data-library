@@ -1,3 +1,5 @@
+NOTE: this repo has been archived. This code now lives in NYCPlanning Data Engineering's [primary repo](https://github.com/NYCPlanning/data-engineering/tree/main/data-library)
+
 # db-data-library
 ![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/nycplanning/library)
 
